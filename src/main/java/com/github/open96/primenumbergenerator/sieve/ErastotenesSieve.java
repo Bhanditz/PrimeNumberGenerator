@@ -3,7 +3,6 @@ package com.github.open96.primenumbergenerator.sieve;
 import java.io.*;
 import java.math.BigInteger;
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Created by end on 03/04/17.
@@ -53,12 +52,13 @@ public class ErastotenesSieve {
                     output.write(buffer);
                 }
             }
+            output.write(createBuffer(1)); //Add one byte for zero.
             output.close();
         } catch (IOException e) {
         }
     }
 
-    private static byte readByteFromFile(String filePath,int position) throws IOException {
+    private static byte readByteFromFile(String filePath,long position) throws IOException {
         RandomAccessFile file = new RandomAccessFile(filePath,"r");
         file.seek(position);
         byte[] bytes = new byte[1];
@@ -67,7 +67,7 @@ public class ErastotenesSieve {
         return bytes[0];
     }
 
-    private static void writeByteToFile(String filePath,int position, byte[] data) throws IOException {
+    private static void writeByteToFile(String filePath,long position, byte[] data) throws IOException {
         RandomAccessFile file = new RandomAccessFile(filePath,"rw");
         file.seek(position);
         file.write(data);
@@ -93,13 +93,71 @@ public class ErastotenesSieve {
         }
     }
 
+    public void deleteNonPrimeNumbers() throws IOException {
+        //Define threads
+        LinkedList<Thread>allThreads = new LinkedList<>();
+        for (BigInteger x= new BigInteger("2");x.compareTo(squareRootOfBigInteger(limit))!=1;x=x.add(BigInteger.ONE)){
+            final BigInteger finalX = x;
+            allThreads.add(new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        if(readByteFromFile(FILE_NAME, finalX.longValue())==1){
+                            for(BigInteger y = finalX.add(finalX); y.compareTo(limit)!=1; y=y.add(finalX)){
+                                try {
+                                    writeByteToFile(FILE_NAME,y.longValue(),new byte[]{0});
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }));
+            //Run threads every 5 ms
+            try {
+                allThreads.getLast().start();
+                if(finalX.intValue()==2){
+                    Thread.sleep(2000);
+                }else{
+                    Thread.sleep(3);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("All threads were started...");
+        boolean areAllThreadsDead=false;
+        while (!areAllThreadsDead){
+            int deadThreadCount=0;
+            areAllThreadsDead=true;
+            for(int x=0;x<allThreads.size();x++){
+                if(allThreads.get(x).isAlive()){
+                    areAllThreadsDead=false;
+                }else{
+                    deadThreadCount++;
+                }
+            }
+            try {
+                System.out.println("Please wait... "+deadThreadCount+" / "+allThreads.size());
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        }
+
     public ErastotenesSieve(BigInteger upperLimit){
         limit=upperLimit;
         populateSieve();
         sqrt=squareRootOfBigInteger(limit);
+
+        //Already delete 0 and 1 as they are not prime
         try {
-            writeByteToFile(FILE_NAME,999,new byte[]{3});
-            System.out.println(readByteFromFile(FILE_NAME,999));
+            writeByteToFile(FILE_NAME,0,new byte[]{0});
+            writeByteToFile(FILE_NAME,1,new byte[]{0});
         } catch (IOException e) {
             e.printStackTrace();
         }
