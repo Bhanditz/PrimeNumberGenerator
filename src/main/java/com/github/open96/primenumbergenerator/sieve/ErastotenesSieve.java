@@ -1,8 +1,9 @@
 package com.github.open96.primenumbergenerator.sieve;
 
-import java.lang.reflect.Array;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigInteger;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -12,7 +13,8 @@ import java.util.List;
 public class ErastotenesSieve {
     private final BigInteger limit;
     private final BigInteger sqrt;
-    private List<Boolean> sieve;
+    private List<Byte> sieve;
+    public static final int BUFFER_SIZE = 16384;
 
     private BigInteger squareRootOfBigInteger(BigInteger number){
         BigInteger a = BigInteger.ONE;
@@ -28,17 +30,37 @@ public class ErastotenesSieve {
         return a.subtract(BigInteger.ONE);
     }
 
+    private byte[] createBuffer(int size){
+        byte buffer[] = new byte[size];
+        for(int x=0;x<buffer.length;x++){
+            buffer[x]=1;
+        }
+        return buffer;
+    }
+
     private void populateSieve(){
-        for(BigInteger x= BigInteger.ZERO;x.compareTo(limit)!=0;x=x.add(BigInteger.ONE)){
-            sieve.add(new Boolean(true));
-            System.out.println(x);
+        try{
+            FileOutputStream output = new FileOutputStream("sieve");
+            byte buffer[] = createBuffer(BUFFER_SIZE);
+            for(BigInteger x= BigInteger.ZERO;x.compareTo(limit)<=0;x=x.add(new BigInteger(String.valueOf(BUFFER_SIZE)))){
+                if(x.add(new BigInteger(String.valueOf(BUFFER_SIZE))).compareTo(limit)==1){
+                    int lastBufferSize=limit.subtract(x).intValue();
+                    byte lastBuffer[]=createBuffer(lastBufferSize);
+                    output.write(lastBuffer);
+                    x=limit.add(new BigInteger(String.valueOf(BUFFER_SIZE*2)));
+                }else {
+                    output.write(buffer);
+                }
+            }
+            output.close();
+        } catch (IOException e) {
         }
     }
 
 
     public ErastotenesSieve(BigInteger upperLimit){
         limit=upperLimit;
-        sieve=new ArrayList<Boolean>();
+        sieve=new LinkedList<Byte>();
         populateSieve();
         sqrt=squareRootOfBigInteger(limit);
     }
