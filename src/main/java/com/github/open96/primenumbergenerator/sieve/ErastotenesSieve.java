@@ -13,6 +13,7 @@ public class ErastotenesSieve {
     private final BigInteger limit;
     private final BigInteger sqrt;
     public static final int BUFFER_SIZE = 8192;
+    private static final String FILE_NAME = "sieve";
 
     private BigInteger squareRootOfBigInteger(BigInteger number){
         BigInteger a = BigInteger.ONE;
@@ -38,9 +39,9 @@ public class ErastotenesSieve {
 
     private void populateSieve(){
         try{
-            File f = new File("sieve");
+            File f = new File(FILE_NAME);
             f.delete();
-            FileOutputStream output = new FileOutputStream("sieve");
+            FileOutputStream output = new FileOutputStream(FILE_NAME);
             byte buffer[] = createBuffer(BUFFER_SIZE);
             for(BigInteger x= BigInteger.ZERO;x.compareTo(limit)<=0;x=x.add(new BigInteger(String.valueOf(BUFFER_SIZE)))){
                 if(x.add(new BigInteger(String.valueOf(BUFFER_SIZE))).compareTo(limit)==1){
@@ -66,7 +67,7 @@ public class ErastotenesSieve {
         return bytes[0];
     }
 
-    private static void writeByteToFile(String filePath,int position, byte data) throws IOException {
+    private static void writeByteToFile(String filePath,int position, byte[] data) throws IOException {
         RandomAccessFile file = new RandomAccessFile(filePath,"rw");
         file.seek(position);
         file.write(data);
@@ -76,12 +77,12 @@ public class ErastotenesSieve {
     public void countSieve(){
         System.out.println("Counting!!!");
         try {
-            BufferedInputStream input = new BufferedInputStream(new FileInputStream("sieve"));
+            BufferedInputStream input = new BufferedInputStream(new FileInputStream(FILE_NAME));
             int currentCharacter;
             BigInteger charactersCount = BigInteger.ZERO;
             while((currentCharacter = input.read())!=-1) {
-                charactersCount=charactersCount.add(BigInteger.ONE);
                 System.out.println(charactersCount+" / " +limit + " Character is: "+currentCharacter);
+                charactersCount=charactersCount.add(BigInteger.ONE);
             }
             input.close();
             System.out.println(charactersCount);
@@ -96,5 +97,11 @@ public class ErastotenesSieve {
         limit=upperLimit;
         populateSieve();
         sqrt=squareRootOfBigInteger(limit);
+        try {
+            writeByteToFile(FILE_NAME,999,new byte[]{3});
+            System.out.println(readByteFromFile(FILE_NAME,999));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
