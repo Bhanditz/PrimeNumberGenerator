@@ -12,7 +12,6 @@ import java.util.List;
 public class ErastotenesSieve {
     private final BigInteger limit;
     private final BigInteger sqrt;
-    private List<Byte> sieve;
     public static final int BUFFER_SIZE = 8192;
 
     private BigInteger squareRootOfBigInteger(BigInteger number){
@@ -58,6 +57,22 @@ public class ErastotenesSieve {
         }
     }
 
+    private static byte readByteFromFile(String filePath,int position) throws IOException {
+        RandomAccessFile file = new RandomAccessFile(filePath,"r");
+        file.seek(position);
+        byte[] bytes = new byte[1];
+        file.read(bytes);
+        file.close();
+        return bytes[0];
+    }
+
+    private static void writeByteToFile(String filePath,int position, byte data) throws IOException {
+        RandomAccessFile file = new RandomAccessFile(filePath,"rw");
+        file.seek(position);
+        file.write(data);
+        file.close();
+    }
+
     public void countSieve(){
         System.out.println("Counting!!!");
         try {
@@ -79,7 +94,6 @@ public class ErastotenesSieve {
 
     public ErastotenesSieve(BigInteger upperLimit){
         limit=upperLimit;
-        sieve=new LinkedList<Byte>();
         populateSieve();
         sqrt=squareRootOfBigInteger(limit);
     }
