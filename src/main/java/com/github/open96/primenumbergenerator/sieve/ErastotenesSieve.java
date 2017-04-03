@@ -1,7 +1,6 @@
 package com.github.open96.primenumbergenerator.sieve;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigInteger;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,7 +13,7 @@ public class ErastotenesSieve {
     private final BigInteger limit;
     private final BigInteger sqrt;
     private List<Byte> sieve;
-    public static final int BUFFER_SIZE = 16384;
+    public static final int BUFFER_SIZE = 8192;
 
     private BigInteger squareRootOfBigInteger(BigInteger number){
         BigInteger a = BigInteger.ONE;
@@ -40,6 +39,8 @@ public class ErastotenesSieve {
 
     private void populateSieve(){
         try{
+            File f = new File("sieve");
+            f.delete();
             FileOutputStream output = new FileOutputStream("sieve");
             byte buffer[] = createBuffer(BUFFER_SIZE);
             for(BigInteger x= BigInteger.ZERO;x.compareTo(limit)<=0;x=x.add(new BigInteger(String.valueOf(BUFFER_SIZE)))){
@@ -57,6 +58,24 @@ public class ErastotenesSieve {
         }
     }
 
+    public void countSieve(){
+        System.out.println("Counting!!!");
+        try {
+            BufferedInputStream input = new BufferedInputStream(new FileInputStream("sieve"));
+            int currentCharacter;
+            BigInteger charactersCount = BigInteger.ZERO;
+            while((currentCharacter = input.read())!=-1) {
+                charactersCount=charactersCount.add(BigInteger.ONE);
+                System.out.println(charactersCount+" / " +limit + " Character is: "+currentCharacter);
+            }
+            input.close();
+            System.out.println(charactersCount);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public ErastotenesSieve(BigInteger upperLimit){
         limit=upperLimit;
