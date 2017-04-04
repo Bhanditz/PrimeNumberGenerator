@@ -77,39 +77,47 @@ public class ErastotenesSieve {
         }
     }
 
-    private static byte readByteFromFile(String filePath,long position) throws IOException {
-        RandomAccessFile file = new RandomAccessFile(filePath,"r");
-        file.seek(position);
+    private static byte readByteFromFile(String filePath,long position){
         byte[] bytes = new byte[1];
-        file.read(bytes);
-        file.close();
+        try(RandomAccessFile file = new RandomAccessFile(filePath,"r")){
+            file.seek(position);
+            file.read(bytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return bytes[0];
     }
 
-    private static void writeByteToFile(String filePath,long position, byte[] data) throws IOException {
-        RandomAccessFile file = new RandomAccessFile(filePath,"rw");
-        file.seek(position);
-        file.write(data);
-        file.close();
-    }
-
-    public void printSieve(){
-        try {
-            BufferedInputStream input = new BufferedInputStream(new FileInputStream(FILE_NAME));
-            int currentCharacter;
-            BigInteger charactersCount = BigInteger.ZERO;
-            while((currentCharacter = input.read())!=-1 && charactersCount.compareTo(limit)<0) {
-                if(currentCharacter==1)
-                    System.out.println(charactersCount);
-                charactersCount=charactersCount.add(BigInteger.ONE);
-            }
-            input.close();
+    private static void writeByteToFile(String filePath,long position, byte[] data){
+        try(RandomAccessFile file = new RandomAccessFile(filePath,"rw")){
+            file.seek(position);
+            file.write(data);
+            file.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    public void printSieve(){
+        int primesCounter=0;
+        try(BufferedInputStream input = new BufferedInputStream(new FileInputStream(FILE_NAME))) {
+            int currentCharacter;
+            BigInteger charactersCount = BigInteger.ZERO;
+            while((currentCharacter = input.read())!=-1 && charactersCount.compareTo(limit)<0) {
+                if(currentCharacter==1){
+                    System.out.println(charactersCount);
+                    primesCounter++;
+                }
+                charactersCount=charactersCount.add(BigInteger.ONE);
+        }
+            } catch (IOException e1) {
+            e1.printStackTrace();
+    }
+        System.out.println("Found "+primesCounter+" primes in that range");
+    }
+
 
     int runningThreads(LinkedList<Thread> threads){
         int count=0;
@@ -121,7 +129,7 @@ public class ErastotenesSieve {
         return count;
     }
 
-    public void deleteNonPrimeNumbers() throws IOException {
+    public void deleteNonPrimeNumbers() {
         //Define threads
         LinkedList<Thread>allThreads = new LinkedList<>();
         for (BigInteger x= new BigInteger("3");x.compareTo(squareRootOfBigInteger(limit))!=1;x=x.add(new BigInteger("2"))){
@@ -130,23 +138,13 @@ public class ErastotenesSieve {
                 allThreads.add(new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        try {
                             if(readByteFromFile(FILE_NAME, finalX.longValue())==1) {
                                 for (BigInteger y = finalX.add(finalX); y.compareTo(limit) != 1; y = y.add(finalX)) {
-                                    try {
                                         writeByteToFile(FILE_NAME, y.longValue(), new byte[]{0});
-                                        //System.out.println("I am thread number " + finalX + " and I am at " + y + " / " + limit);
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
                                 }
                             }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }));
-            }
+                }}));
+        }
         //Start threads, but don't start them all at once otherwise program will crash
         new Thread(new Runnable() {
             @Override
@@ -181,8 +179,8 @@ public class ErastotenesSieve {
         while (!areAllThreadsDead){
             int deadThreadCount=0;
             areAllThreadsDead=true;
-            for(int x=0;x<allThreads.size();x++){
-                if(allThreads.get(x).isAlive() || allThreads.get(x).getState()== Thread.State.NEW){
+            for(int c=0;c<allThreads.size();c++){
+                if(allThreads.get(c).isAlive() || allThreads.get(c).getState()== Thread.State.NEW){
                     areAllThreadsDead=false;
                 }else{
                     deadThreadCount++;
@@ -203,12 +201,8 @@ public class ErastotenesSieve {
         sqrt=squareRootOfBigInteger(limit);
         populateSieve();
         //Already delete 0 and 1 as they are not prime, also set 2 as prime
-        try {
-            writeByteToFile(FILE_NAME,0,new byte[]{0});
-            writeByteToFile(FILE_NAME,1,new byte[]{0});
-            writeByteToFile(FILE_NAME,2,new byte[]{1});
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        writeByteToFile(FILE_NAME,0,new byte[]{0});
+        writeByteToFile(FILE_NAME,1,new byte[]{0});
+        writeByteToFile(FILE_NAME,2,new byte[]{1});
     }
 }
