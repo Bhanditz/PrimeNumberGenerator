@@ -7,7 +7,7 @@ import java.util.LinkedList;
 /**
  * Created by end on 03/04/17.
  * This sieve works on any sensible positive number
- * Currently works pretty well up to 8-digit numbers
+ * Currently works pretty well up to 9-digit numbers
  */
 public class ErastotenesSieve {
     private final BigInteger limit;
@@ -124,7 +124,7 @@ public class ErastotenesSieve {
     public void deleteNonPrimeNumbers() throws IOException {
         //Define threads
         LinkedList<Thread>allThreads = new LinkedList<>();
-        for (BigInteger x= new BigInteger("3");x.compareTo(squareRootOfBigInteger(limit))!=1;x=x.add(BigInteger.ONE)){
+        for (BigInteger x= new BigInteger("3");x.compareTo(squareRootOfBigInteger(limit))!=1;x=x.add(new BigInteger("2"))){
             final BigInteger finalX = x;
             //Dont run thread for number 5 as it was already optimized
                 allThreads.add(new Thread(new Runnable() {
