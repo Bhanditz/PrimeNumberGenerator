@@ -6,7 +6,8 @@ import java.util.LinkedList;
 
 /**
  * Created by end on 03/04/17.
- * This sieve works on any positive number
+ * This sieve works on any sensible positive number
+ * Currently works pretty well up to 8-digit numbers
  */
 public class ErastotenesSieve {
     private final BigInteger limit;
@@ -155,7 +156,7 @@ public class ErastotenesSieve {
                     boolean startNext=false;
                     int runningThreads=runningThreads(allThreads);
                     while (!startNext){
-                        if(runningThreads<cores*6){
+                        if(runningThreads<cores*4){
                             try {
                                 Thread.sleep(10);
                             } catch (InterruptedException e) {
