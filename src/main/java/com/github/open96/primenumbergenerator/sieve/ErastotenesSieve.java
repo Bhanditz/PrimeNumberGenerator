@@ -14,6 +14,10 @@ public class ErastotenesSieve {
     public static final int BUFFER_SIZE = 8192;
     private static final String FILE_NAME = "sieve";
 
+    private enum Mode{
+        ZERO,ONE,NORMAL
+    }
+
     private BigInteger squareRootOfBigInteger(BigInteger number){
         BigInteger a = BigInteger.ONE;
         BigInteger b = number.shiftRight(5).add(BigInteger.valueOf(8));
@@ -28,10 +32,24 @@ public class ErastotenesSieve {
         return a.subtract(BigInteger.ONE);
     }
 
-    private byte[] createBuffer(int size){
+    private byte[] createBuffer(int size, Mode mode){
         byte buffer[] = new byte[size];
-        for(int x=0;x<buffer.length;x++){
-            buffer[x]=1;
+        for(int x=0;x<buffer.length;x++) {
+            switch (mode) {
+                case ZERO:
+                    buffer[x] = 0;
+                    break;
+                case ONE:
+                    buffer[x] = 1;
+                    break;
+                case NORMAL:
+                    if(x%2==0){
+                        buffer[x] = 1;
+                    }
+                    else
+                        buffer[x]=0;
+                    break;
+            }
         }
         return buffer;
     }
@@ -41,18 +59,18 @@ public class ErastotenesSieve {
             File f = new File(FILE_NAME);
             f.delete();
             FileOutputStream output = new FileOutputStream(FILE_NAME);
-            byte buffer[] = createBuffer(BUFFER_SIZE);
+            output.write(createBuffer(1,Mode.ZERO)); //Add one byte for zero.
+            byte buffer[] = createBuffer(BUFFER_SIZE,Mode.NORMAL);
             for(BigInteger x= BigInteger.ZERO;x.compareTo(limit)<=0;x=x.add(new BigInteger(String.valueOf(BUFFER_SIZE)))){
                 if(x.add(new BigInteger(String.valueOf(BUFFER_SIZE))).compareTo(limit)==1){
                     int lastBufferSize=limit.subtract(x).intValue();
-                    byte lastBuffer[]=createBuffer(lastBufferSize);
+                    byte lastBuffer[]=createBuffer(lastBufferSize,Mode.NORMAL);
                     output.write(lastBuffer);
                     x=limit.add(new BigInteger(String.valueOf(BUFFER_SIZE*2)));
                 }else {
                     output.write(buffer);
                 }
             }
-            output.write(createBuffer(1)); //Add one byte for zero.
             output.close();
         } catch (IOException e) {
         }
@@ -74,18 +92,17 @@ public class ErastotenesSieve {
         file.close();
     }
 
-    public void countSieve(){
-        System.out.println("Counting!!!");
+    public void printSieve(){
         try {
             BufferedInputStream input = new BufferedInputStream(new FileInputStream(FILE_NAME));
             int currentCharacter;
             BigInteger charactersCount = BigInteger.ZERO;
-            while((currentCharacter = input.read())!=-1) {
-                System.out.println(charactersCount+" / " +limit + " Character is: "+currentCharacter);
+            while((currentCharacter = input.read())!=-1 && charactersCount.compareTo(limit)<0) {
+                if(currentCharacter==1)
+                    System.out.println(charactersCount);
                 charactersCount=charactersCount.add(BigInteger.ONE);
             }
             input.close();
-            System.out.println(charactersCount);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -93,48 +110,78 @@ public class ErastotenesSieve {
         }
     }
 
+    int runningThreads(LinkedList<Thread> threads){
+        int count=0;
+        for(int x=0;x<threads.size();x++){
+            if(threads.get(x).isAlive()){
+                count++;
+            }
+        }
+        return count;
+    }
+
     public void deleteNonPrimeNumbers() throws IOException {
         //Define threads
         LinkedList<Thread>allThreads = new LinkedList<>();
-        for (BigInteger x= new BigInteger("2");x.compareTo(squareRootOfBigInteger(limit))!=1;x=x.add(BigInteger.ONE)){
+        for (BigInteger x= new BigInteger("3");x.compareTo(squareRootOfBigInteger(limit))!=1;x=x.add(BigInteger.ONE)){
             final BigInteger finalX = x;
-            allThreads.add(new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        if(readByteFromFile(FILE_NAME, finalX.longValue())==1){
-                            for(BigInteger y = finalX.add(finalX); y.compareTo(limit)!=1; y=y.add(finalX)){
-                                try {
-                                    writeByteToFile(FILE_NAME,y.longValue(),new byte[]{0});
-                                } catch (IOException e) {
-                                    e.printStackTrace();
+            //Dont run thread for number 5 as it was already optimized
+                allThreads.add(new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            if(readByteFromFile(FILE_NAME, finalX.longValue())==1) {
+                                for (BigInteger y = finalX.add(finalX); y.compareTo(limit) != 1; y = y.add(finalX)) {
+                                    try {
+                                        writeByteToFile(FILE_NAME, y.longValue(), new byte[]{0});
+                                        //System.out.println("I am thread number " + finalX + " and I am at " + y + " / " + limit);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                             }
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    }
+                }));
+            }
+        //Start threads, but don't start them all at once otherwise program will crash
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int cores = Runtime.getRuntime().availableProcessors();
+                for(int x=0;x<allThreads.size();x++){
+                    boolean startNext=false;
+                    int runningThreads=runningThreads(allThreads);
+                    while (!startNext){
+                        if(runningThreads<cores*6){
+                            try {
+                                Thread.sleep(10);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            allThreads.get(x).start();
+                            startNext=true;
+                        }
+                        else{
+                            try {
+                                Thread.sleep(500);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            runningThreads=runningThreads(allThreads);
+                        }
                     }
                 }
-            }));
-            //Run threads every 5 ms
-            try {
-                allThreads.getLast().start();
-                if(finalX.intValue()==2){
-                    Thread.sleep(2000);
-                }else{
-                    Thread.sleep(3);
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
-        }
-        System.out.println("All threads were started...");
+        }).start();
         boolean areAllThreadsDead=false;
         while (!areAllThreadsDead){
             int deadThreadCount=0;
             areAllThreadsDead=true;
             for(int x=0;x<allThreads.size();x++){
-                if(allThreads.get(x).isAlive()){
+                if(allThreads.get(x).isAlive() || allThreads.get(x).getState()== Thread.State.NEW){
                     areAllThreadsDead=false;
                 }else{
                     deadThreadCount++;
@@ -149,15 +196,16 @@ public class ErastotenesSieve {
         }
         }
 
+
     public ErastotenesSieve(BigInteger upperLimit){
         limit=upperLimit;
-        populateSieve();
         sqrt=squareRootOfBigInteger(limit);
-
-        //Already delete 0 and 1 as they are not prime
+        populateSieve();
+        //Already delete 0 and 1 as they are not prime, also set 2 as prime
         try {
             writeByteToFile(FILE_NAME,0,new byte[]{0});
             writeByteToFile(FILE_NAME,1,new byte[]{0});
+            writeByteToFile(FILE_NAME,2,new byte[]{1});
         } catch (IOException e) {
             e.printStackTrace();
         }
