@@ -126,16 +126,14 @@ public class ErastotenesSieve {
     public void deleteNonPrimeNumbers() {
         //Define threads
         LinkedList<Thread>allThreads = new LinkedList<>();
-        for (BigInteger x= new BigInteger("3");x.compareTo(squareRootOfBigInteger(limit))!=1;x=x.add(new BigInteger("2"))){
+        for (BigInteger x= new BigInteger("3");x.compareTo(sqrt)!=1;x=x.add(new BigInteger("2"))){
             final BigInteger finalX = x;
                 allThreads.add(new Thread(() -> {
                         if(readByteFromFile(FILE_NAME, finalX.longValue())==1) {
-                            try {
-                                RandomAccessFile file = new RandomAccessFile(FILE_NAME,"rw");
+                            try(RandomAccessFile file = new RandomAccessFile(FILE_NAME,"rw");) {
                                 for (BigInteger y = finalX.add(finalX); y.compareTo(limit) != 1; y = y.add(finalX)) {
                                     writeByteToFile(file, y.longValue(), new byte[]{0});
                                 }
-                                file.close();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -153,17 +151,12 @@ public class ErastotenesSieve {
                         allThreads.get(x).start();
                         startNext=true;
                         try {
-                            Thread.sleep(8);
+                            Thread.sleep(5);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
                     else{
-                        try {
-                            Thread.sleep(cores*3*8);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
                         runningThreads=runningThreads(allThreads);
                     }
                 }
