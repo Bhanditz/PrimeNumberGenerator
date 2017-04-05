@@ -14,6 +14,7 @@ public class ErastotenesSieve {
     private final BigInteger sqrt;
     public static final int BUFFER_SIZE = 8192;
     private static final String FILE_NAME = "sieve";
+    private RandomAccessFile file;
 
     private enum Mode{
         ZERO,ONE,NORMAL
@@ -88,16 +89,9 @@ public class ErastotenesSieve {
         return bytes[0];
     }
 
-    private static void writeByteToFile(String filePath,long position, byte[] data){
-        try(RandomAccessFile file = new RandomAccessFile(filePath,"rw")){
+    private static void writeByteToFile(RandomAccessFile file,long position, byte[] data) throws IOException {
             file.seek(position);
             file.write(data);
-            file.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void printSieve(){
@@ -134,43 +128,43 @@ public class ErastotenesSieve {
         LinkedList<Thread>allThreads = new LinkedList<>();
         for (BigInteger x= new BigInteger("3");x.compareTo(squareRootOfBigInteger(limit))!=1;x=x.add(new BigInteger("2"))){
             final BigInteger finalX = x;
-            //Dont run thread for number 5 as it was already optimized
-                allThreads.add(new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                            if(readByteFromFile(FILE_NAME, finalX.longValue())==1) {
+                allThreads.add(new Thread(() -> {
+                        if(readByteFromFile(FILE_NAME, finalX.longValue())==1) {
+                            try {
+                                RandomAccessFile file = new RandomAccessFile(FILE_NAME,"rw");
                                 for (BigInteger y = finalX.add(finalX); y.compareTo(limit) != 1; y = y.add(finalX)) {
-                                        writeByteToFile(FILE_NAME, y.longValue(), new byte[]{0});
+                                    writeByteToFile(file, y.longValue(), new byte[]{0});
                                 }
+                                file.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
-                }}));
+                        }
+            }));
         }
         //Start threads, but don't start them all at once otherwise program will crash
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                int cores = Runtime.getRuntime().availableProcessors();
-                for(int x=0;x<allThreads.size();x++){
-                    boolean startNext=false;
-                    int runningThreads=runningThreads(allThreads);
-                    while (!startNext){
-                        if(runningThreads<cores*4){
-                            try {
-                                Thread.sleep(10);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            allThreads.get(x).start();
-                            startNext=true;
+        new Thread(() -> {
+            int cores = Runtime.getRuntime().availableProcessors();
+            for(int x=0;x<allThreads.size();x++){
+                boolean startNext=false;
+                int runningThreads=runningThreads(allThreads);
+                while (!startNext){
+                    if(runningThreads<=cores*3){
+                        allThreads.get(x).start();
+                        startNext=true;
+                        try {
+                            Thread.sleep(8);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
-                        else{
-                            try {
-                                Thread.sleep(500);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            runningThreads=runningThreads(allThreads);
+                    }
+                    else{
+                        try {
+                            Thread.sleep(cores*3*8);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
+                        runningThreads=runningThreads(allThreads);
                     }
                 }
             }
@@ -201,8 +195,12 @@ public class ErastotenesSieve {
         sqrt=squareRootOfBigInteger(limit);
         populateSieve();
         //Already delete 0 and 1 as they are not prime, also set 2 as prime
-        writeByteToFile(FILE_NAME,0,new byte[]{0});
-        writeByteToFile(FILE_NAME,1,new byte[]{0});
-        writeByteToFile(FILE_NAME,2,new byte[]{1});
+        try(RandomAccessFile file = new RandomAccessFile(FILE_NAME,"rw");) {
+            writeByteToFile(file,0,new byte[]{0});
+            writeByteToFile(file,1,new byte[]{0});
+            writeByteToFile(file,2,new byte[]{1});
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
