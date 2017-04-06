@@ -1,9 +1,6 @@
 package com.github.open96.primenumbergenerator.sieve;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.math.BigInteger;
 
 /**
@@ -61,6 +58,23 @@ public class LinearSieve {
         }
     }
 
+    public void printSieve(){
+        int primesCounter=0;
+        try(BufferedInputStream input = new BufferedInputStream(new FileInputStream(FILE_NAME))) {
+            int currentCharacter;
+            BigInteger charactersCount = BigInteger.ZERO;
+            while((currentCharacter = input.read())!=-1 && charactersCount.compareTo(limit)<0) {
+                if(currentCharacter==1){
+                    System.out.println(charactersCount);
+                    primesCounter++;
+                }
+                charactersCount=charactersCount.add(BigInteger.ONE);
+            }
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        System.out.println("Found "+primesCounter+" primes in that range");
+    }
 
     public LinearSieve(BigInteger upperLimit) {
         limit = upperLimit;
