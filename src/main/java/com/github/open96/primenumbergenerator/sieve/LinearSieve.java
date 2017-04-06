@@ -65,11 +65,10 @@ public class LinearSieve {
     public LinearSieve(BigInteger upperLimit) {
         limit = upperLimit;
         populateSieve();
-        //Already delete 0 and 1 as they are not prime, also set 2 as prime
-        try (RandomAccessFile file = new RandomAccessFile(FILE_NAME, "rw");) {
+        //Already delete 0 and 1 as they are not prime
+        try (RandomAccessFile file = new RandomAccessFile(FILE_NAME, "rw")) {
             writeByteToFile(file, 0, new byte[]{0});
             writeByteToFile(file, 1, new byte[]{0});
-            writeByteToFile(file, 2, new byte[]{1});
         } catch (IOException e) {
             e.printStackTrace();
         }
