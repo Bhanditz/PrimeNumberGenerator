@@ -13,7 +13,7 @@ public class ErastotenesSieve {
     private final BigInteger limit;
     private final BigInteger sqrt;
     public static final int BUFFER_SIZE = 8192;
-    private static final String FILE_NAME = "sieve";
+    private static final String FILE_NAME = "erastotenes_sieve";
     private RandomAccessFile file;
 
     private enum Mode{
