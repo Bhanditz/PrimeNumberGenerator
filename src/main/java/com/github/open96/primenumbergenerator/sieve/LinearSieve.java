@@ -5,8 +5,9 @@ import java.math.BigInteger;
 
 /**
  * Created by end on 06/04/17.
+ * A lot slower than my implemenation of erastotenes sieve on numbers above 100000
  */
-public class LinearSieve implements Sieve {
+public class LinearSieve implements com.github.open96.primenumbergenerator.sieve.Sieve {
     private final BigInteger limit;
     public static final int BUFFER_SIZE = 8192;
     private static final String FILE_NAME = "linear_sieve";

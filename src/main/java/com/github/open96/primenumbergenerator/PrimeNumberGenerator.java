@@ -1,7 +1,9 @@
 package com.github.open96.primenumbergenerator;
 
 
+import com.github.open96.primenumbergenerator.sieve.ErastotenesSieve;
 import com.github.open96.primenumbergenerator.sieve.LinearSieve;
+import com.github.open96.primenumbergenerator.sieve.Sieve;
 
 import java.math.BigInteger;
 
@@ -11,8 +13,14 @@ import java.math.BigInteger;
 public class PrimeNumberGenerator {
     public static void main(String[] args) {
         long startingProgramExecutionTime = System.currentTimeMillis();
-        int size = 1000000;
-        LinearSieve sieve = new LinearSieve(new BigInteger(String.valueOf(size)));
+        int size = 150000;
+        Sieve sieve;
+        if(size<100000){
+            sieve = new LinearSieve(new BigInteger(String.valueOf(size)));
+        }
+        else {
+            sieve = new ErastotenesSieve(new BigInteger(String.valueOf(size)));
+        }
         sieve.deleteNonPrimeNumbers();
         sieve.printSieve();
         long endingProgramExecutionTime = System.currentTimeMillis();
