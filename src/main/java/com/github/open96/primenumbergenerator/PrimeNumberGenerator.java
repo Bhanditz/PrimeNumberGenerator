@@ -5,7 +5,6 @@ import com.github.open96.primenumbergenerator.sieve.ErastotenesSieve;
 import com.github.open96.primenumbergenerator.sieve.LinearSieve;
 import com.github.open96.primenumbergenerator.sieve.Sieve;
 
-import java.math.BigInteger;
 
 /**
  * Hello world!
