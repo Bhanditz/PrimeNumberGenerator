@@ -35,7 +35,7 @@ public class LinearSieve {
         file.write(data);
     }
 
-    private byte[] createBuffer(int size, ErastotenesSieve.Mode mode){
+    private byte[] createBuffer(int size, Mode mode){
         byte buffer[] = new byte[size];
         for(int x=0;x<buffer.length;x++) {
             switch (mode) {
@@ -62,12 +62,12 @@ public class LinearSieve {
             File f = new File(FILE_NAME);
             f.delete();
             FileOutputStream output = new FileOutputStream(FILE_NAME);
-            output.write(createBuffer(1, ErastotenesSieve.Mode.ZERO)); //Add one byte for zero.
-            byte buffer[] = createBuffer(BUFFER_SIZE, ErastotenesSieve.Mode.NORMAL);
+            output.write(createBuffer(1, Mode.ZERO)); //Add one byte for zero.
+            byte buffer[] = createBuffer(BUFFER_SIZE, Mode.NORMAL);
             for(BigInteger x= BigInteger.ZERO;x.compareTo(limit)<=0;x=x.add(new BigInteger(String.valueOf(BUFFER_SIZE)))){
                 if(x.add(new BigInteger(String.valueOf(BUFFER_SIZE))).compareTo(limit)==1){
                     int lastBufferSize=limit.subtract(x).intValue();
-                    byte lastBuffer[]=createBuffer(lastBufferSize, ErastotenesSieve.Mode.NORMAL);
+                    byte lastBuffer[]=createBuffer(lastBufferSize, Mode.NORMAL);
                     output.write(lastBuffer);
                     x=limit.add(new BigInteger(String.valueOf(BUFFER_SIZE*2)));
                 }else {
@@ -84,7 +84,6 @@ public class LinearSieve {
 
     public LinearSieve(BigInteger upperLimit){
         limit=upperLimit;
-        sqrt=squareRootOfBigInteger(limit);
         populateSieve();
         //Already delete 0 and 1 as they are not prime, also set 2 as prime
         try(RandomAccessFile file = new RandomAccessFile(FILE_NAME,"rw");) {
