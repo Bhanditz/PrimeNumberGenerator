@@ -14,7 +14,6 @@ public class ErastotenesSieve {
     private final BigInteger sqrt;
     public static final int BUFFER_SIZE = 8192;
     private static final String FILE_NAME = "sieve";
-    private RandomAccessFile file;
 
     private enum Mode{
         ZERO,ONE,NORMAL
