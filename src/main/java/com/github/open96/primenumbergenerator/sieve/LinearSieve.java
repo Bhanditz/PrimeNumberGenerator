@@ -109,6 +109,7 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
         try (RandomAccessFile file = new RandomAccessFile(FILE_NAME, "rw")) {
             long firstMultiplier = 2;
             while (firstMultiplier * firstMultiplier <= limit) {
+                System.out.println("Please wait... " + firstMultiplier*firstMultiplier + " / " + limit);
                 long secondMultiplier = firstMultiplier;
                 while (firstMultiplier * secondMultiplier <= limit) {
                     long x = firstMultiplier * secondMultiplier;
