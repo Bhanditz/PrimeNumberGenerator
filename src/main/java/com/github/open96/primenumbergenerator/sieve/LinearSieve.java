@@ -31,7 +31,7 @@ public class LinearSieve {
     private byte[] createBuffer(int size) {
         byte buffer[] = new byte[size];
         for (int x = 0; x < buffer.length; x++) {
-            buffer[x] = 0;
+            buffer[x] = 1;
         }
         return buffer;
     }
@@ -63,7 +63,7 @@ public class LinearSieve {
         try(BufferedInputStream input = new BufferedInputStream(new FileInputStream(FILE_NAME))) {
             int currentCharacter;
             BigInteger charactersCount = BigInteger.ZERO;
-            while((currentCharacter = input.read())!=-1 && charactersCount.compareTo(limit)<0) {
+            while((currentCharacter = input.read())!=-1 && charactersCount.compareTo(limit)<=0) {
                 if(currentCharacter==1){
                     System.out.println(charactersCount);
                     primesCounter++;
