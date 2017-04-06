@@ -110,6 +110,14 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
         }
     }
 
+    @Override
+    public boolean checkIfNumberIsPrime(BigInteger number) {
+        byte isPrime=readByteFromFile(FILE_NAME,number.longValue());
+        if(isPrime==1)
+            return true;
+        return false;
+    }
+
     public LinearSieve(BigInteger upperLimit) {
         limit = upperLimit;
         populateSieve();

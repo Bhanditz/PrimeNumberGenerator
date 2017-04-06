@@ -112,6 +112,14 @@ public class ErastotenesSieve implements com.github.open96.primenumbergenerator.
         System.out.println("Found "+primesCounter+" primes in that range");
     }
 
+    @Override
+    public boolean checkIfNumberIsPrime(BigInteger number) {
+        byte isPrime=readByteFromFile(FILE_NAME,number.longValue());
+        if(isPrime==1)
+            return true;
+        return false;
+    }
+
 
     int runningThreads(LinkedList<Thread> threads){
         int count=0;
