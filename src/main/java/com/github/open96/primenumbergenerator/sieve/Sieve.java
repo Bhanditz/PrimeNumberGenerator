@@ -8,5 +8,5 @@ import java.math.BigInteger;
 public interface Sieve {
     void deleteNonPrimeNumbers();
     void printSieve();
-    boolean checkIfNumberIsPrime(BigInteger number);
+    boolean checkIfNumberIsPrime(long number);
 }

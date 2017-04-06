@@ -16,14 +16,15 @@ public class PrimeNumberGenerator {
         int size = 150000;
         Sieve sieve;
         if(size<100000){
-            sieve = new LinearSieve(new BigInteger(String.valueOf(size)));
+            sieve = new LinearSieve(size);
         }
         else {
-            sieve = new ErastotenesSieve(new BigInteger(String.valueOf(size)));
+            sieve = new ErastotenesSieve(size);
         }
         sieve.deleteNonPrimeNumbers();
         sieve.printSieve();
         long endingProgramExecutionTime = System.currentTimeMillis();
         System.out.println("This program took " + (new Double(endingProgramExecutionTime - startingProgramExecutionTime) / 1000) + " seconds to complete");
+        System.out.println(sieve.checkIfNumberIsPrime(9));
     }
 }

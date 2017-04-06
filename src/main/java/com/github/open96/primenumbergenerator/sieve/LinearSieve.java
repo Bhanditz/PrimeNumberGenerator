@@ -8,7 +8,7 @@ import java.math.BigInteger;
  * A lot slower than my implemenation of erastotenes sieve on numbers above 100000
  */
 public class LinearSieve implements com.github.open96.primenumbergenerator.sieve.Sieve {
-    private final BigInteger limit;
+    private final long limit;
     public static final int BUFFER_SIZE = 8192;
     private static final String FILE_NAME = "linear_sieve";
 
@@ -44,12 +44,12 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
             FileOutputStream output = new FileOutputStream(FILE_NAME);
             output.write(createBuffer(1)); //Add one byte for zero.
             byte buffer[] = createBuffer(BUFFER_SIZE);
-            for (BigInteger x = BigInteger.ZERO; x.compareTo(limit) <= 0; x = x.add(new BigInteger(String.valueOf(BUFFER_SIZE)))) {
-                if (x.add(new BigInteger(String.valueOf(BUFFER_SIZE))).compareTo(limit) == 1) {
-                    int lastBufferSize = limit.subtract(x).intValue();
-                    byte lastBuffer[] = createBuffer(lastBufferSize);
+            for (long x = 0; x<=limit; x+=BUFFER_SIZE) {
+                if(x+BUFFER_SIZE>limit) {
+                    long lastBufferSize=limit-x;
+                    byte lastBuffer[]=createBuffer((int)lastBufferSize);
                     output.write(lastBuffer);
-                    x = limit.add(new BigInteger(String.valueOf(BUFFER_SIZE * 2)));
+                    x=limit+1;
                 } else {
                     output.write(buffer);
                 }
@@ -63,43 +63,41 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
         int primesCounter = 0;
         try (BufferedInputStream input = new BufferedInputStream(new FileInputStream(FILE_NAME))) {
             int currentCharacter;
-            BigInteger charactersCount = BigInteger.ZERO;
-            while ((currentCharacter = input.read()) != -1 && charactersCount.compareTo(limit) <= 0) {
+            long charactersCount = 0;
+            while ((currentCharacter = input.read()) != -1 && charactersCount<=limit) {
                 if (currentCharacter == 1) {
                     System.out.println(charactersCount);
                     primesCounter++;
                 }
-                charactersCount = charactersCount.add(BigInteger.ONE);
+                charactersCount++;
             }
         } catch (IOException e1) {
             e1.printStackTrace();
         }
-        System.out.println("Found " + primesCounter + " primes in that range");
     }
 
-    private BigInteger nextProbablePrime(BigInteger startingNumber) {
-        BigInteger tmp = startingNumber.add(BigInteger.ONE);
-        byte template[] = new byte[]{1};
-        while (tmp.compareTo(limit) <= 0) {
-            if (readByteFromFile(FILE_NAME, tmp.longValue()) == template[0]) {
+    private long nextProbablePrime(long startingNumber) {
+        long tmp = startingNumber+1;
+        while (tmp<=limit) {
+            if (readByteFromFile(FILE_NAME, tmp) == 1) {
                 return tmp;
             }
-            tmp = tmp.add(BigInteger.ONE);
+            tmp++;
         }
-        return new BigInteger("-1");
+        return -1;
     }
 
     public void deleteNonPrimeNumbers() {
         System.out.println("Deleting non-prime numbers...");
         try (RandomAccessFile file = new RandomAccessFile(FILE_NAME, "rw")) {
-            BigInteger firstMultiplier = new BigInteger("2");
-            while (firstMultiplier.multiply(firstMultiplier).compareTo(limit) <= 0) {
-                BigInteger secondMultiplier = firstMultiplier;
-                while (firstMultiplier.multiply(secondMultiplier).compareTo(limit) <= 0) {
-                    BigInteger x = firstMultiplier.multiply(secondMultiplier);
-                    while (x.compareTo(limit) <= 0) {
-                        writeByteToFile(file, x.longValue(), new byte[]{0});
-                        x = firstMultiplier.multiply(x);
+            long firstMultiplier = 2;
+            while (firstMultiplier*firstMultiplier<=limit) {
+                long secondMultiplier = firstMultiplier;
+                while (firstMultiplier*secondMultiplier<=limit) {
+                    long x = firstMultiplier*secondMultiplier;
+                    while (x<=limit) {
+                        writeByteToFile(file, x, new byte[]{0});
+                        x = firstMultiplier*x;
                     }
                     secondMultiplier = nextProbablePrime(secondMultiplier);
                 }
@@ -111,14 +109,14 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
     }
 
     @Override
-    public boolean checkIfNumberIsPrime(BigInteger number) {
-        byte isPrime=readByteFromFile(FILE_NAME,number.longValue());
+    public boolean checkIfNumberIsPrime(long number) {
+        byte isPrime=readByteFromFile(FILE_NAME,number);
         if(isPrime==1)
             return true;
         return false;
     }
 
-    public LinearSieve(BigInteger upperLimit) {
+    public LinearSieve(long upperLimit) {
         limit = upperLimit;
         populateSieve();
         //Already delete 0 and 1 as they are not prime

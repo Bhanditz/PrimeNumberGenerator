@@ -10,8 +10,8 @@ import java.util.LinkedList;
  * Currently works pretty well up to 9-digit numbers, above that it gets pretty slow
  */
 public class ErastotenesSieve implements com.github.open96.primenumbergenerator.sieve.Sieve {
-    private final BigInteger limit;
-    private final BigInteger sqrt;
+    private final long limit;
+    private final long sqrt;
     public static final int BUFFER_SIZE = 8192;
     private static final String FILE_NAME = "erastotenes_sieve";
     private RandomAccessFile file;
@@ -63,12 +63,12 @@ public class ErastotenesSieve implements com.github.open96.primenumbergenerator.
             FileOutputStream output = new FileOutputStream(FILE_NAME);
             output.write(createBuffer(1,Mode.ZERO)); //Add one byte for zero.
             byte buffer[] = createBuffer(BUFFER_SIZE,Mode.NORMAL);
-            for(BigInteger x= BigInteger.ZERO;x.compareTo(limit)<=0;x=x.add(new BigInteger(String.valueOf(BUFFER_SIZE)))){
-                if(x.add(new BigInteger(String.valueOf(BUFFER_SIZE))).compareTo(limit)==1){
-                    int lastBufferSize=limit.subtract(x).intValue();
-                    byte lastBuffer[]=createBuffer(lastBufferSize,Mode.NORMAL);
+            for(long x= 0;x<=limit;x+=BUFFER_SIZE){
+                if(x+BUFFER_SIZE>limit){
+                    long lastBufferSize=limit-x;
+                    byte lastBuffer[]=createBuffer((int)lastBufferSize,Mode.NORMAL);
                     output.write(lastBuffer);
-                    x=limit.add(new BigInteger(String.valueOf(BUFFER_SIZE*2)));
+                    x=limit+1;
                 }else {
                     output.write(buffer);
                 }
@@ -98,23 +98,22 @@ public class ErastotenesSieve implements com.github.open96.primenumbergenerator.
         int primesCounter=0;
         try(BufferedInputStream input = new BufferedInputStream(new FileInputStream(FILE_NAME))) {
             int currentCharacter;
-            BigInteger charactersCount = BigInteger.ZERO;
-            while((currentCharacter = input.read())!=-1 && charactersCount.compareTo(limit)<0) {
+            long charactersCount = 0;
+            while((currentCharacter = input.read())!=-1 && charactersCount <= limit) {
                 if(currentCharacter==1){
                     System.out.println(charactersCount);
                     primesCounter++;
                 }
-                charactersCount=charactersCount.add(BigInteger.ONE);
+                charactersCount++;
         }
             } catch (IOException e1) {
             e1.printStackTrace();
     }
-        System.out.println("Found "+primesCounter+" primes in that range");
     }
 
     @Override
-    public boolean checkIfNumberIsPrime(BigInteger number) {
-        byte isPrime=readByteFromFile(FILE_NAME,number.longValue());
+    public boolean checkIfNumberIsPrime(long number) {
+        byte isPrime=readByteFromFile(FILE_NAME,number);
         if(isPrime==1)
             return true;
         return false;
@@ -134,13 +133,13 @@ public class ErastotenesSieve implements com.github.open96.primenumbergenerator.
     public void deleteNonPrimeNumbers() {
         //Define threads
         LinkedList<Thread>allThreads = new LinkedList<>();
-        for (BigInteger x= new BigInteger("3");x.compareTo(sqrt)!=1;x=x.add(new BigInteger("2"))){
-            final BigInteger finalX = x;
+        for (long x= 3;x<=sqrt;x+=2){
+            final long finalX = x;
                 allThreads.add(new Thread(() -> {
-                        if(readByteFromFile(FILE_NAME, finalX.longValue())==1) {
+                        if(readByteFromFile(FILE_NAME, finalX)==1) {
                             try(RandomAccessFile file = new RandomAccessFile(FILE_NAME,"rw");) {
-                                for (BigInteger y = finalX.add(finalX); y.compareTo(limit) != 1; y = y.add(finalX)) {
-                                    writeByteToFile(file, y.longValue(), new byte[]{0});
+                                for (long y = finalX*2; y<limit; y+=finalX) {
+                                    writeByteToFile(file, y, new byte[]{0});
                                 }
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -191,9 +190,9 @@ public class ErastotenesSieve implements com.github.open96.primenumbergenerator.
         }
 
 
-    public ErastotenesSieve(BigInteger upperLimit){
+    public ErastotenesSieve(long upperLimit){
         limit=upperLimit;
-        sqrt=squareRootOfBigInteger(limit);
+        sqrt=squareRootOfBigInteger(new BigInteger(String.valueOf(limit))).longValue();
         populateSieve();
         //Already delete 0 and 1 as they are not prime, also set 2 as prime
         try(RandomAccessFile file = new RandomAccessFile(FILE_NAME,"rw");) {
