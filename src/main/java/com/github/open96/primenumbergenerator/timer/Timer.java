@@ -18,7 +18,7 @@ public class Timer {
     }
 
     public boolean stop() {
-        if (!hasEnded) {
+        if (hasStarted) {
             endingTime = System.currentTimeMillis();
             hasEnded = true;
             result = endingTime - startingTime;
