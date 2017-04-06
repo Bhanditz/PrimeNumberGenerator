@@ -9,4 +9,5 @@ public interface Sieve {
     void deleteNonPrimeNumbers();
     void printSieve();
     boolean checkIfNumberIsPrime(long number);
+    long countPrimes(long lowerRange,long upperRange);
 }

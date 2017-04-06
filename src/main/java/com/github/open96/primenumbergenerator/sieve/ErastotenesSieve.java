@@ -105,6 +105,23 @@ public class ErastotenesSieve implements com.github.open96.primenumbergenerator.
     }
 
     @Override
+    public long countPrimes(long lowerRange, long upperRange) {
+        if(lowerRange<0 || upperRange>limit){
+            return -1;
+        }else{
+            long primesCount=0;
+            long currentNumber=lowerRange;
+            while (currentNumber<=upperRange){
+                if(readByteFromFile(FILE_NAME, currentNumber)==1){
+                    primesCount++;
+                }
+                currentNumber++;
+            }
+            return primesCount;
+        }
+    }
+
+    @Override
     public boolean checkIfNumberIsPrime(long number) {
         byte isPrime=readByteFromFile(FILE_NAME,number);
         if(isPrime==1)

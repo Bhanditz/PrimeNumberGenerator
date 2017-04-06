@@ -26,5 +26,6 @@ public class PrimeNumberGenerator {
         long endingProgramExecutionTime = System.currentTimeMillis();
         System.out.println("This program took " + (new Double(endingProgramExecutionTime - startingProgramExecutionTime) / 1000) + " seconds to complete");
         System.out.println(sieve.checkIfNumberIsPrime(9));
+        System.out.println(sieve.countPrimes(0,size));
     }
 }
