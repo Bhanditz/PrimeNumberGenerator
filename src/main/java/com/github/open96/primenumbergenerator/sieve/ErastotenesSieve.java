@@ -7,7 +7,7 @@ import java.util.LinkedList;
 /**
  * Created by end on 03/04/17.
  * This sieve works on any sensible positive number
- * Currently works pretty well up to 9-digit numbers, above that it gets pretty slow
+ * Currently works pretty well up to 9-digit numbers (for range of 100000000 prepare for above 20 minute waiting time), above that it gets pretty slow
  */
 public class ErastotenesSieve implements com.github.open96.primenumbergenerator.sieve.Sieve {
     private final long limit;
