@@ -4,6 +4,7 @@ package com.github.open96.primenumbergenerator;
 import com.github.open96.primenumbergenerator.sieve.ErastotenesSieve;
 import com.github.open96.primenumbergenerator.sieve.LinearSieve;
 import com.github.open96.primenumbergenerator.sieve.Sieve;
+import com.github.open96.primenumbergenerator.timer.Timer;
 
 
 /**
@@ -11,8 +12,9 @@ import com.github.open96.primenumbergenerator.sieve.Sieve;
  */
 public class PrimeNumberGenerator {
     public static void main(String[] args) {
-        long startingProgramExecutionTime = System.currentTimeMillis();
-        int size = 150000;
+        Timer t = new Timer();
+        t.start();
+        int size = 100000;
         Sieve sieve;
         if (size <= 200000) {
             sieve = new LinearSieve(size);
@@ -21,9 +23,13 @@ public class PrimeNumberGenerator {
         }
         sieve.deleteNonPrimeNumbers();
         sieve.printSieve();
-        long endingProgramExecutionTime = System.currentTimeMillis();
-        System.out.println("This program took " + (new Double(endingProgramExecutionTime - startingProgramExecutionTime) / 1000) + " seconds to complete");
         System.out.println(sieve.checkIfNumberIsPrime(9));
         System.out.println(sieve.countPrimes(0, size));
+        t.stop();
+        if (t.getTimeInMilliseconds(false) < 1000) {
+            t.getTimeInMilliseconds(true);
+        } else {
+            t.getTimeInSeconds(true);
+        }
     }
 }
