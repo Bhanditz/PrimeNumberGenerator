@@ -94,12 +94,12 @@ public class ErastotenesSieve implements com.github.open96.primenumbergenerator.
     }
 
     public void printSieve() {
-        long charactersCount = 0;
+        long charactersCount = 3;
         while (charactersCount <= limit) {
             if (readByteFromFile(FILE_NAME, charactersCount) == 1) {
                 System.out.println(charactersCount);
             }
-            charactersCount++;
+            charactersCount+=2;
         }
     }
 
@@ -108,13 +108,17 @@ public class ErastotenesSieve implements com.github.open96.primenumbergenerator.
         if (lowerRange < 0 || upperRange > limit) {
             return -1;
         } else {
-            long primesCount = 0;
-            long currentNumber = lowerRange;
+            long primesCount = 1,currentNumber;
+            if(lowerRange%2==0){
+                currentNumber = lowerRange+1;
+            } else {
+                currentNumber = lowerRange;
+            }
             while (currentNumber <= upperRange) {
                 if (readByteFromFile(FILE_NAME, currentNumber) == 1) {
                     primesCount++;
                 }
-                currentNumber++;
+                currentNumber+=2;
             }
             return primesCount;
         }

@@ -59,12 +59,13 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
     }
 
     public void printSieve() {
-        long charactersCount = 0;
+        System.out.println(2);
+        long charactersCount = 3;
         while (charactersCount <= limit) {
             if (readByteFromFile(FILE_NAME, charactersCount) == 1) {
                 System.out.println(charactersCount);
             }
-            charactersCount++;
+            charactersCount+=2;
         }
     }
 
@@ -73,13 +74,20 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
         if (lowerRange < 0 || upperRange > limit) {
             return -1;
         } else {
-            long primesCount = 0;
-            long currentNumber = lowerRange;
+            long primesCount = 0,currentNumber;
+            if(lowerRange<=2){
+                currentNumber=3;
+                primesCount++;
+            }else if(lowerRange%2==0){
+                currentNumber = lowerRange+1;
+            } else {
+                currentNumber = lowerRange;
+            }
             while (currentNumber <= upperRange) {
                 if (readByteFromFile(FILE_NAME, currentNumber) == 1) {
                     primesCount++;
                 }
-                currentNumber++;
+                currentNumber+=2;
             }
             return primesCount;
         }
