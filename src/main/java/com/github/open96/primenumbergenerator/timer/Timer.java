@@ -45,6 +45,25 @@ public class Timer {
         return -1;
     }
 
+    public double getTimeInMinutes(boolean outputToConsole) {
+        if (hasEnded) {
+            if (outputToConsole)
+                System.out.println("Timer has ended. Time spent is " + (new Double((result / 1000)/60)) + " minutes");
+            return (result / 1000)/60;
+        }
+        return -1;
+    }
+
+    public void showTimeInConsole(){
+        if (result < 1000) {
+            getTimeInMilliseconds(true);
+        } else if (result<60000) {
+            getTimeInSeconds(true);
+        } else{
+            getTimeInMinutes(true);
+        }
+    }
+
     public Timer() {
         hasEnded = false;
         hasStarted = false;

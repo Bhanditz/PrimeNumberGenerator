@@ -14,7 +14,7 @@ public class PrimeNumberGenerator {
     public static void main(String[] args) {
         Timer t = new Timer();
         t.start();
-        int size = 100000;
+        int size = 10000000;
         Sieve sieve;
         if (size <= 200000) {
             sieve = new LinearSieve(size);
@@ -26,10 +26,6 @@ public class PrimeNumberGenerator {
         System.out.println(sieve.checkIfNumberIsPrime(9));
         System.out.println(sieve.countPrimes(0, size));
         t.stop();
-        if (t.getTimeInMilliseconds(false) < 1000) {
-            t.getTimeInMilliseconds(true);
-        } else {
-            t.getTimeInSeconds(true);
-        }
+        t.showTimeInConsole();
     }
 }
