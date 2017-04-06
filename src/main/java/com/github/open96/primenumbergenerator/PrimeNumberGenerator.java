@@ -15,7 +15,7 @@ public class PrimeNumberGenerator {
         long startingProgramExecutionTime = System.currentTimeMillis();
         int size = 150000;
         Sieve sieve;
-        if(size<100000){
+        if(size<=200000){
             sieve = new LinearSieve(size);
         }
         else {
