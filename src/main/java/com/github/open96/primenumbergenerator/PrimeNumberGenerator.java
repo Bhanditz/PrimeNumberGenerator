@@ -15,10 +15,9 @@ public class PrimeNumberGenerator {
         long startingProgramExecutionTime = System.currentTimeMillis();
         int size = 150000;
         Sieve sieve;
-        if(size<=200000){
+        if (size <= 200000) {
             sieve = new LinearSieve(size);
-        }
-        else {
+        } else {
             sieve = new ErastotenesSieve(size);
         }
         sieve.deleteNonPrimeNumbers();
@@ -26,6 +25,6 @@ public class PrimeNumberGenerator {
         long endingProgramExecutionTime = System.currentTimeMillis();
         System.out.println("This program took " + (new Double(endingProgramExecutionTime - startingProgramExecutionTime) / 1000) + " seconds to complete");
         System.out.println(sieve.checkIfNumberIsPrime(9));
-        System.out.println(sieve.countPrimes(0,size));
+        System.out.println(sieve.countPrimes(0, size));
     }
 }

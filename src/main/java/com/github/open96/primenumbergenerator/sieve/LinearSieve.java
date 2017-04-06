@@ -44,12 +44,12 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
             FileOutputStream output = new FileOutputStream(FILE_NAME);
             output.write(createBuffer(1)); //Add one byte for zero.
             byte buffer[] = createBuffer(BUFFER_SIZE);
-            for (long x = 0; x<=limit; x+=BUFFER_SIZE) {
-                if(x+BUFFER_SIZE>limit) {
-                    long lastBufferSize=limit-x;
-                    byte lastBuffer[]=createBuffer((int)lastBufferSize);
+            for (long x = 0; x <= limit; x += BUFFER_SIZE) {
+                if (x + BUFFER_SIZE > limit) {
+                    long lastBufferSize = limit - x;
+                    byte lastBuffer[] = createBuffer((int) lastBufferSize);
                     output.write(lastBuffer);
-                    x=limit+1;
+                    x = limit + 1;
                 } else {
                     output.write(buffer);
                 }
@@ -59,10 +59,10 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
         }
     }
 
-    public void printSieve(){
+    public void printSieve() {
         long charactersCount = 0;
-        while(charactersCount <= limit) {
-            if(readByteFromFile(FILE_NAME, charactersCount)==1){
+        while (charactersCount <= limit) {
+            if (readByteFromFile(FILE_NAME, charactersCount) == 1) {
                 System.out.println(charactersCount);
             }
             charactersCount++;
@@ -71,13 +71,13 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
 
     @Override
     public long countPrimes(long lowerRange, long upperRange) {
-        if(lowerRange<0 || upperRange>limit){
+        if (lowerRange < 0 || upperRange > limit) {
             return -1;
-        }else{
-            long primesCount=0;
-            long currentNumber=lowerRange;
-            while (currentNumber<=upperRange){
-                if(readByteFromFile(FILE_NAME, currentNumber)==1){
+        } else {
+            long primesCount = 0;
+            long currentNumber = lowerRange;
+            while (currentNumber <= upperRange) {
+                if (readByteFromFile(FILE_NAME, currentNumber) == 1) {
                     primesCount++;
                 }
                 currentNumber++;
@@ -87,8 +87,8 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
     }
 
     private long nextProbablePrime(long startingNumber) {
-        long tmp = startingNumber+1;
-        while (tmp<=limit) {
+        long tmp = startingNumber + 1;
+        while (tmp <= limit) {
             if (readByteFromFile(FILE_NAME, tmp) == 1) {
                 return tmp;
             }
@@ -101,13 +101,13 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
         System.out.println("Deleting non-prime numbers...");
         try (RandomAccessFile file = new RandomAccessFile(FILE_NAME, "rw")) {
             long firstMultiplier = 2;
-            while (firstMultiplier*firstMultiplier<=limit) {
+            while (firstMultiplier * firstMultiplier <= limit) {
                 long secondMultiplier = firstMultiplier;
-                while (firstMultiplier*secondMultiplier<=limit) {
-                    long x = firstMultiplier*secondMultiplier;
-                    while (x<=limit) {
+                while (firstMultiplier * secondMultiplier <= limit) {
+                    long x = firstMultiplier * secondMultiplier;
+                    while (x <= limit) {
                         writeByteToFile(file, x, new byte[]{0});
-                        x = firstMultiplier*x;
+                        x = firstMultiplier * x;
                     }
                     secondMultiplier = nextProbablePrime(secondMultiplier);
                 }
@@ -120,8 +120,8 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
 
     @Override
     public boolean checkIfNumberIsPrime(long number) {
-        byte isPrime=readByteFromFile(FILE_NAME,number);
-        if(isPrime==1)
+        byte isPrime = readByteFromFile(FILE_NAME, number);
+        if (isPrime == 1)
             return true;
         return false;
     }

@@ -7,7 +7,10 @@ import java.math.BigInteger;
  */
 public interface Sieve {
     void deleteNonPrimeNumbers();
+
     void printSieve();
+
     boolean checkIfNumberIsPrime(long number);
-    long countPrimes(long lowerRange,long upperRange);
+
+    long countPrimes(long lowerRange, long upperRange);
 }
