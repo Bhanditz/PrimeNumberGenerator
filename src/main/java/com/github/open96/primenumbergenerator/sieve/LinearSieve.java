@@ -76,6 +76,38 @@ public class LinearSieve {
         System.out.println("Found "+primesCounter+" primes in that range");
     }
 
+    private BigInteger nextProbablePrime(BigInteger startingNumber){
+        BigInteger tmp = startingNumber.add(BigInteger.ONE);
+        byte template[]=new byte[]{1};
+        while (tmp.compareTo(limit)<=0){
+            if(readByteFromFile(FILE_NAME,tmp.longValue())==template[0]){
+                return tmp;
+            }
+            tmp=tmp.add(BigInteger.ONE);
+        }
+        return new BigInteger("-1");
+    }
+
+    public void deleteNonPrimeNumbers() {
+        try(RandomAccessFile file = new RandomAccessFile(FILE_NAME, "rw")){
+            BigInteger firstMultiplier = new BigInteger("2");
+            while (firstMultiplier.multiply(firstMultiplier).compareTo(limit)<=0){
+                BigInteger secondMultiplier = firstMultiplier;
+                while (firstMultiplier.multiply(secondMultiplier).compareTo(limit)<=0){
+                    BigInteger x = firstMultiplier.multiply(secondMultiplier);
+                    while (x.compareTo(limit)<=0){
+                        writeByteToFile(file,x.longValue(),new byte[]{0});
+                        x=firstMultiplier.multiply(x);
+                    }
+                    secondMultiplier=nextProbablePrime(secondMultiplier);
+                }
+                firstMultiplier=nextProbablePrime(firstMultiplier);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public LinearSieve(BigInteger upperLimit) {
         limit = upperLimit;
         populateSieve();
