@@ -2,6 +2,9 @@ package com.github.open96.primenumbergenerator.timer;
 
 import junit.framework.TestCase;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
 /**
  * Created by end on 06/04/17.
  */
@@ -46,6 +49,15 @@ public class TimerTest extends TestCase {
         Thread.sleep(10000);
         t2.stop();
         assertTrue(t2.getTimeInSeconds(false) >= 10);
+    }
+
+    //Over 11 second test.
+    public void testGetTimeInMinutes() throws Exception {
+        Timer t1 = new Timer();
+        t1.start();
+        Thread.sleep(60000);
+        t1.stop();
+        assertTrue(t1.getTimeInMinutes(false) >= 1);
     }
 
 }
