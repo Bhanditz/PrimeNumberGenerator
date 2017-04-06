@@ -6,7 +6,7 @@ import java.math.BigInteger;
 /**
  * Created by end on 06/04/17.
  */
-public class LinearSieve {
+public class LinearSieve implements Sieve {
     private final BigInteger limit;
     public static final int BUFFER_SIZE = 8192;
     private static final String FILE_NAME = "linear_sieve";
