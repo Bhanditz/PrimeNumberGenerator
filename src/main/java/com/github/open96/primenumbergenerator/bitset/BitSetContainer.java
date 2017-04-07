@@ -49,18 +49,30 @@ public class BitSetContainer {
 
     private void populateContainer(){
         for(int x=0;x<numberOfContainers;x++){
-            container[x]=new BitSet(Integer.MAX_VALUE);
-            for(long y=0;y<=Integer.MAX_VALUE;y++){
-                container[x].set((int)y);
+            if(x!=numberOfContainers-1){
+                container[x]=new BitSet(Integer.MAX_VALUE);
+                for(long y=0;y<=Integer.MAX_VALUE;y++){
+                    container[x].set((int)y);
+                }
+            }else{
+                if(numberOfContainers==1) {
+                    container[x] = new BitSet((int) containerSize);
+                    for (long y = 0; y <= (int) containerSize; y++) {
+                        container[x].set((int) y);
+                    }
+                }
+                else {
+                    container[x]=new BitSet((int)(containerSize-(numberOfContainers-1)*Integer.MAX_VALUE));
+                        for(long y=0;y<=(int)containerSize-numberOfContainers*Integer.MAX_VALUE;y++){
+                            container[x].set((int)y);
+                }
             }
         }
+    }
     }
 
     private void createContainer(){
         numberOfContainers = (int)(containerSize/Integer.MAX_VALUE+1);
-        if(numberOfContainers==0){
-            numberOfContainers=1;
-        }
         container=new BitSet[numberOfContainers];
         populateContainer();
     }
