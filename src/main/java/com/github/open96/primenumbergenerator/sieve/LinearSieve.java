@@ -5,7 +5,7 @@ import java.util.BitSet;
 
 /**
  * Created by end on 06/04/17.
- * A lot slower than my implemenation of erastotenes sieve on numbers above 100000
+ * Only works up to 3000000
  */
 public class LinearSieve implements com.github.open96.primenumbergenerator.sieve.Sieve {
     private final int limit;

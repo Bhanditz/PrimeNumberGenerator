@@ -14,9 +14,9 @@ public class PrimeNumberGenerator {
     public static void main(String[] args) {
         Timer t = new Timer();
         t.start();
-        int size = 100000;
+        int size = 3000000;
         Sieve sieve;
-        if (size <= 1000000) {
+        if (size <= 300000) {
             sieve = new LinearSieve(size);
         } else {
             sieve = new EratostenesSieve(size);
