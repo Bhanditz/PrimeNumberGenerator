@@ -1,71 +1,25 @@
 package com.github.open96.primenumbergenerator.sieve;
 
 import java.io.*;
+import java.util.BitSet;
 
 /**
  * Created by end on 06/04/17.
  * A lot slower than my implemenation of erastotenes sieve on numbers above 100000
  */
 public class LinearSieve implements com.github.open96.primenumbergenerator.sieve.Sieve {
-    private final long limit;
-    public static final int BUFFER_SIZE = 8192;
-    private static final String FILE_NAME = "linear_sieve";
+    private final int limit;
+    BitSet sieve;
 
-
-    private static byte readByteFromFile(String filePath, long position) {
-        byte[] bytes = new byte[1];
-        try (RandomAccessFile file = new RandomAccessFile(filePath, "r")) {
-            file.seek(position);
-            file.read(bytes);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return bytes[0];
-    }
-
-    private static void writeByteToFile(RandomAccessFile file, long position, byte[] data) throws IOException {
-        file.seek(position);
-        file.write(data);
-    }
-
-    private byte[] createBuffer(int size) {
-        byte buffer[] = new byte[size];
-        for (int x = 0; x < buffer.length; x++) {
-            buffer[x] = 1;
-        }
-        return buffer;
-    }
-
-    private void populateSieve() {
-        try {
-            File f = new File(FILE_NAME);
-            f.delete();
-            FileOutputStream output = new FileOutputStream(FILE_NAME);
-            output.write(createBuffer(1)); //Add one byte for zero.
-            byte buffer[] = createBuffer(BUFFER_SIZE);
-            for (long x = 0; x <= limit; x += BUFFER_SIZE) {
-                if (x + BUFFER_SIZE > limit) {
-                    long lastBufferSize = limit - x;
-                    byte lastBuffer[] = createBuffer((int) lastBufferSize);
-                    output.write(lastBuffer);
-                    x = limit + 1;
-                } else {
-                    output.write(buffer);
-                }
-            }
-            output.close();
-        } catch (IOException e) {
-        }
-    }
 
     public void printSieve() {
         System.out.println(2);
-        long charactersCount = 3;
+        int charactersCount = 3;
         while (charactersCount <= limit) {
-            if (readByteFromFile(FILE_NAME, charactersCount) == 1) {
+            if (sieve.get(charactersCount)) {
                 System.out.println(charactersCount);
             }
-            charactersCount+=2;
+            charactersCount += 2;
         }
     }
 
@@ -74,74 +28,76 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
         if (lowerRange < 0 || upperRange > limit) {
             return -1;
         } else {
-            long primesCount = 0,currentNumber;
-            if(lowerRange<=2){
-                currentNumber=3;
+            int primesCount = 0, currentNumber;
+            if (lowerRange <= 2) {
+                currentNumber = 3;
                 primesCount++;
-            }else if(lowerRange%2==0){
-                currentNumber = lowerRange+1;
+            } else if (lowerRange % 2 == 0) {
+                currentNumber = (int) lowerRange + 1;
             } else {
-                currentNumber = lowerRange;
+                currentNumber = (int) lowerRange;
             }
             while (currentNumber <= upperRange) {
-                if (readByteFromFile(FILE_NAME, currentNumber) == 1) {
+                if (sieve.get(currentNumber)) {
                     primesCount++;
                 }
-                currentNumber+=2;
+                currentNumber += 2;
             }
             return primesCount;
         }
     }
 
-    private long nextProbablePrime(long startingNumber) {
-        long tmp = startingNumber + 1;
+    private int nextProbablePrime(int startingNumber) {
+        int tmp = startingNumber + 1;
         while (tmp <= limit) {
-            if (readByteFromFile(FILE_NAME, tmp) == 1) {
+            if (sieve.get(tmp)) {
                 return tmp;
             }
             tmp++;
         }
-        return -1;
+        return limit;
+    }
+
+    void populateSieve() {
+        for (int x = 0; x <= limit + 1; x++) {
+            sieve.set(x);
+        }
     }
 
     public void deleteNonPrimeNumbers() {
-        try (RandomAccessFile file = new RandomAccessFile(FILE_NAME, "rw")) {
-            long firstMultiplier = 2;
-            while (firstMultiplier * firstMultiplier <= limit) {
-                System.out.println("Please wait... " + firstMultiplier*firstMultiplier + " / " + limit);
-                long secondMultiplier = firstMultiplier;
-                while (firstMultiplier * secondMultiplier <= limit) {
-                    long x = firstMultiplier * secondMultiplier;
-                    while (x <= limit) {
-                        writeByteToFile(file, x, new byte[]{0});
-                        x = firstMultiplier * x;
+        int firstMultiplier = 2;
+        while (firstMultiplier * firstMultiplier <= limit) {
+            System.out.println("Please wait... " + firstMultiplier * firstMultiplier + " / " + limit);
+            int secondMultiplier = firstMultiplier;
+            while (firstMultiplier * secondMultiplier <= limit) {
+                int x = firstMultiplier * secondMultiplier;
+                while (x <= limit) {
+                    sieve.set(x, false);
+                    x = firstMultiplier * x;
+                    if (x < 0) {
+                        x = limit + 1;
                     }
-                    secondMultiplier = nextProbablePrime(secondMultiplier);
                 }
-                firstMultiplier = nextProbablePrime(firstMultiplier);
+                secondMultiplier = nextProbablePrime(secondMultiplier);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+            firstMultiplier = nextProbablePrime(firstMultiplier);
         }
     }
 
     @Override
     public boolean checkIfNumberIsPrime(long number) {
-        byte isPrime = readByteFromFile(FILE_NAME, number);
-        if (isPrime == 1)
+        boolean isPrime = sieve.get((int) number);
+        if (isPrime)
             return true;
         return false;
     }
 
-    public LinearSieve(long upperLimit) {
+    public LinearSieve(int upperLimit) {
         limit = upperLimit;
+        sieve = new BitSet(limit + 1);
         populateSieve();
         //Already delete 0 and 1 as they are not prime
-        try (RandomAccessFile file = new RandomAccessFile(FILE_NAME, "rw")) {
-            writeByteToFile(file, 0, new byte[]{0});
-            writeByteToFile(file, 1, new byte[]{0});
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        sieve.set(0, false);
+        sieve.set(1, false);
     }
 }

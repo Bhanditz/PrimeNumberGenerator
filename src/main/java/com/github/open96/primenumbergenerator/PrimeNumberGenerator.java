@@ -14,15 +14,14 @@ public class PrimeNumberGenerator {
     public static void main(String[] args) {
         Timer t = new Timer();
         t.start();
-        int size = 100000000;
+        int size = 100000;
         Sieve sieve;
-        if (size <= 200000) {
+        if (size <= 1000000) {
             sieve = new LinearSieve(size);
         } else {
             sieve = new EratostenesSieve(size);
         }
         sieve.deleteNonPrimeNumbers();
-        sieve.printSieve();
         System.out.println(sieve.checkIfNumberIsPrime(9));
         System.out.println(sieve.countPrimes(0, size));
         t.stop();
