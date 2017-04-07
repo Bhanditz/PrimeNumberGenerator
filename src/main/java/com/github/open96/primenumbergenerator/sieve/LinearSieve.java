@@ -38,7 +38,7 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
                 currentNumber = (int) lowerRange;
             }
             while (currentNumber <= upperRange) {
-                if (sieve.get(currentNumber)) {
+                if (checkIfNumberIsPrime(currentNumber)) {
                     primesCount++;
                 }
                 currentNumber += 2;

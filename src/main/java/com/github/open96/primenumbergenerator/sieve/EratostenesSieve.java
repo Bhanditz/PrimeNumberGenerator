@@ -115,7 +115,7 @@ public class EratostenesSieve implements com.github.open96.primenumbergenerator.
                 currentNumber = lowerRange;
             }
             while (currentNumber <= upperRange) {
-                if (readByteFromFile(FILE_NAME, currentNumber) == 1) {
+                if (checkIfNumberIsPrime(currentNumber)) {
                     primesCount++;
                 }
                 currentNumber+=2;
