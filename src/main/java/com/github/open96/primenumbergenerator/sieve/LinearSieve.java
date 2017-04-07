@@ -1,6 +1,5 @@
 package com.github.open96.primenumbergenerator.sieve;
 
-import java.io.*;
 import java.util.BitSet;
 
 /**
@@ -65,22 +64,22 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
     }
 
     public void deleteNonPrimeNumbers() {
-        int firstMultiplier = 2;
+        long firstMultiplier = 2;
         while (firstMultiplier * firstMultiplier <= limit) {
             System.out.println("Please wait... " + firstMultiplier * firstMultiplier + " / " + limit);
-            int secondMultiplier = firstMultiplier;
+            long secondMultiplier = firstMultiplier;
             while (firstMultiplier * secondMultiplier <= limit) {
-                int x = firstMultiplier * secondMultiplier;
+                long x = firstMultiplier * secondMultiplier;
                 while (x <= limit) {
-                    sieve.set(x, false);
+                    sieve.set((int)x, false);
                     x = firstMultiplier * x;
                     if (x < 0) {
                         x = limit + 1;
                     }
                 }
-                secondMultiplier = nextProbablePrime(secondMultiplier);
+                secondMultiplier = nextProbablePrime((int)secondMultiplier);
             }
-            firstMultiplier = nextProbablePrime(firstMultiplier);
+            firstMultiplier = nextProbablePrime((int)firstMultiplier);
         }
     }
 
