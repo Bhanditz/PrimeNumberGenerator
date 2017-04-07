@@ -2,8 +2,6 @@ package com.github.open96.primenumbergenerator.sieve;
 
 import com.github.open96.primenumbergenerator.bitset.BitSetContainer;
 
-import java.util.BitSet;
-
 /**
  * Created by end on 06/04/17.
  * Only works up to 3000000
@@ -16,7 +14,7 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
     public void printSieve() {
         System.out.println(2);
         long charactersCount = 3;
-        while (charactersCount <= limit && charactersCount>0) {
+        while (charactersCount <= limit && charactersCount > 0) {
             if (sieve.get(charactersCount)) {
                 System.out.println(charactersCount);
             }
@@ -53,7 +51,7 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
 
     private long nextProbablePrime(long startingNumber) {
         long tmp = startingNumber + 1;
-        if(tmp>=0){
+        if (tmp >= 0) {
             while (tmp <= limit) {
                 if (sieve.get(tmp)) {
                     return tmp;
@@ -71,13 +69,13 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
             long secondMultiplier = firstMultiplier;
             while (firstMultiplier * secondMultiplier <= limit) {
                 long x = firstMultiplier * secondMultiplier;
-                while (x <= limit && x>0) {
+                while (x <= limit && x > 0) {
                     sieve.set(x, false);
                     x = firstMultiplier * x;
                 }
-                secondMultiplier = nextProbablePrime((int)secondMultiplier);
+                secondMultiplier = nextProbablePrime((int) secondMultiplier);
             }
-            firstMultiplier = nextProbablePrime((int)firstMultiplier);
+            firstMultiplier = nextProbablePrime((int) firstMultiplier);
         }
     }
 
@@ -91,7 +89,7 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
 
     public LinearSieve(long upperLimit) {
         limit = upperLimit;
-        sieve = new BitSetContainer(limit+1);
+        sieve = new BitSetContainer(limit + 1);
         //Already delete 0 and 1 as they are not prime
         sieve.set(0, false);
         sieve.set(1, false);
