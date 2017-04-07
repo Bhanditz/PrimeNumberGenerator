@@ -63,7 +63,7 @@ public class BitSetContainer {
                 }
                 else {
                     container[x]=new BitSet((int)(containerSize-(numberOfContainers-1)*Integer.MAX_VALUE));
-                        for(long y=0;y<=(int)containerSize-numberOfContainers*Integer.MAX_VALUE;y++){
+                        for(long y=0;y<=containerSize-(numberOfContainers-1)*Integer.MAX_VALUE;y++){
                             container[x].set((int)y);
                 }
             }

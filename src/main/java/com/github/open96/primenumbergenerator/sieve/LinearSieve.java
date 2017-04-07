@@ -15,8 +15,8 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
 
     public void printSieve() {
         System.out.println(2);
-        int charactersCount = 3;
-        while (charactersCount <= limit) {
+        long charactersCount = 3;
+        while (charactersCount <= limit && charactersCount>0) {
             if (sieve.get(charactersCount)) {
                 System.out.println(charactersCount);
             }
