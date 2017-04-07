@@ -1,7 +1,7 @@
 package com.github.open96.primenumbergenerator;
 
 
-import com.github.open96.primenumbergenerator.sieve.ErastotenesSieve;
+import com.github.open96.primenumbergenerator.sieve.EratostenesSieve;
 import com.github.open96.primenumbergenerator.sieve.LinearSieve;
 import com.github.open96.primenumbergenerator.sieve.Sieve;
 import com.github.open96.primenumbergenerator.timer.Timer;
@@ -14,12 +14,12 @@ public class PrimeNumberGenerator {
     public static void main(String[] args) {
         Timer t = new Timer();
         t.start();
-        int size = 10000000;
+        int size = 100000000;
         Sieve sieve;
         if (size <= 200000) {
             sieve = new LinearSieve(size);
         } else {
-            sieve = new ErastotenesSieve(size);
+            sieve = new EratostenesSieve(size);
         }
         sieve.deleteNonPrimeNumbers();
         sieve.printSieve();
