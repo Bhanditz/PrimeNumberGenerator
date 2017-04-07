@@ -6,12 +6,15 @@ import junit.framework.TestCase;
  * Created by end on 07/04/17.
  */
 public class LinearSieveTest extends TestCase {
+
     public void testCountPrimes() throws Exception {
+        //This test could carry on bigger numbers, but it is quite a memory hog so
+        // make sure you assign more RAM to your jvm.
         int excepted[]= new int[]{
-                4,25,168,1229,9592,78498
+                4,25,168,1229,9592,78498,664579,5761455
         };
         int exceptedCounter=0;
-        for (int x=10;x<=1000000;x*=10){
+        for (long x=10;x<= new Long(String.valueOf("100000000"));x*=10){
             Sieve s = new LinearSieve(x);
             s.deleteNonPrimeNumbers();
             assertEquals(s.countPrimes(0,(long)x),excepted[exceptedCounter]);

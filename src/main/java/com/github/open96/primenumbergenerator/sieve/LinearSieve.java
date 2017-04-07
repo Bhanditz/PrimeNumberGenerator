@@ -91,7 +91,7 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
 
     public LinearSieve(long upperLimit) {
         limit = upperLimit;
-        sieve = new BitSetContainer(limit);
+        sieve = new BitSetContainer(limit+1);
         //Already delete 0 and 1 as they are not prime
         sieve.set(0, false);
         sieve.set(1, false);
