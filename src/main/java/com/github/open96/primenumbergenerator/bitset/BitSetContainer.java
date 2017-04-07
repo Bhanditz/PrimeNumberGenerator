@@ -23,6 +23,8 @@ public class BitSetContainer {
                 positionInContainer=position;
                 containerNumber=0;
             }
+            if(positionInContainer<0)
+        System.out.println(containerNumber+" "+positionInContainer+" "+position);
             return container[(int)containerNumber].get((int)positionInContainer);
     }
 
@@ -55,7 +57,10 @@ public class BitSetContainer {
     }
 
     private void createContainer(){
-        numberOfContainers = (int)(containerSize/Integer.MAX_VALUE);
+        numberOfContainers = (int)(containerSize/Integer.MAX_VALUE+1);
+        if(numberOfContainers==0){
+            numberOfContainers=1;
+        }
         container=new BitSet[numberOfContainers];
         populateContainer();
     }
