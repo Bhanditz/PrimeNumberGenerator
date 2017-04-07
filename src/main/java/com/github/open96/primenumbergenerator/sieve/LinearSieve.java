@@ -105,7 +105,6 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
     }
 
     public void deleteNonPrimeNumbers() {
-        System.out.println("Deleting non-prime numbers...");
         try (RandomAccessFile file = new RandomAccessFile(FILE_NAME, "rw")) {
             long firstMultiplier = 2;
             while (firstMultiplier * firstMultiplier <= limit) {
