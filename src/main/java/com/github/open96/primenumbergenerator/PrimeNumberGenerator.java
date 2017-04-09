@@ -5,12 +5,15 @@ import com.github.open96.primenumbergenerator.sieve.LinearSieve;
 import com.github.open96.primenumbergenerator.sieve.Sieve;
 import com.github.open96.primenumbergenerator.timer.Timer;
 
+/**
+ * Program works properly up to 6000000000, on 7000000000 it starts to throw incorrect results
+ */
 
 public class PrimeNumberGenerator {
     public static void main(String[] args) {
         Timer t = new Timer();
         t.start();
-        long size = new Long(String.valueOf("10000000000"));
+        long size = new Long(String.valueOf("6000000000"));
         Sieve sieve;
         sieve = new LinearSieve(size);
         sieve.deleteNonPrimeNumbers();

@@ -8,9 +8,9 @@ import junit.framework.TestCase;
 public class BitSetContainerTest extends TestCase {
 
     public void testGet4() throws Exception {
-        Long size = new Long(String.valueOf(Integer.MAX_VALUE))*new Long(3);
+        Long size = new Long(String.valueOf(Integer.MAX_VALUE)) * new Long(3);
         BitSetContainer container = new BitSetContainer(size);
-        long expected = Integer.MAX_VALUE*2;
+        long expected = new Long(String.valueOf(Integer.MAX_VALUE)) * new Long(3);
         assertTrue(container.get(new Long(String.valueOf(expected))));
         expected++;
         assertTrue(container.get(new Long(String.valueOf(expected))));
@@ -27,7 +27,7 @@ public class BitSetContainerTest extends TestCase {
 
 
     public void testGet2() throws Exception {
-        BitSetContainer container = new BitSetContainer((new Long(String.valueOf(Integer.MAX_VALUE)) +1));
+        BitSetContainer container = new BitSetContainer((new Long(String.valueOf(Integer.MAX_VALUE)) + 1));
         long expected = Integer.MAX_VALUE;
         assertTrue(container.get(new Long(String.valueOf(expected))));
         expected++;

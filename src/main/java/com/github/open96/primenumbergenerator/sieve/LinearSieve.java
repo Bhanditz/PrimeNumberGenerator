@@ -4,7 +4,6 @@ import com.github.open96.primenumbergenerator.bitset.BitSetContainer;
 
 /**
  * Created by end on 06/04/17.
- * Only works up to 3000000
  */
 public class LinearSieve implements com.github.open96.primenumbergenerator.sieve.Sieve {
     private final long limit;

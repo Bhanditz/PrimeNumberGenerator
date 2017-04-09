@@ -16,9 +16,9 @@ public class BitSetContainer {
         long containerNumber;
         if (position >= Integer.MAX_VALUE) {
             containerNumber = position / Integer.MAX_VALUE;
-            positionInContainer = (int)(position - Integer.MAX_VALUE * containerNumber);
+            positionInContainer = (int) (position - Integer.MAX_VALUE * containerNumber);
         } else {
-            positionInContainer =(int)position;
+            positionInContainer = (int) position;
             containerNumber = 0;
         }
         return container[(int) containerNumber].get(positionInContainer);
@@ -47,18 +47,18 @@ public class BitSetContainer {
             if (x != numberOfContainers - 1) {
                 container[x] = new BitSet(Integer.MAX_VALUE);
                 for (int y = 0; y < Integer.MAX_VALUE; y++) {
-                    container[x].set(y,true);
+                    container[x].set(y, true);
                 }
             } else {
                 if (numberOfContainers == 1) {
                     container[x] = new BitSet((int) containerSize);
                     for (int y = 0; y < containerSize; y++) {
-                        container[x].set(y,true);
+                        container[x].set(y, true);
                     }
                 } else {
                     container[x] = new BitSet((int) (containerSize - (numberOfContainers - 1) * Integer.MAX_VALUE));
                     for (int y = 0; y < Integer.MAX_VALUE; y++) {
-                        container[x].set(y,true);
+                        container[x].set(y, true);
                     }
                 }
             }
