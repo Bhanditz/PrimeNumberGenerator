@@ -1,6 +1,7 @@
 package com.github.open96.primenumbergenerator.bitset;
 
 import java.util.BitSet;
+import java.util.LinkedList;
 
 /**
  * Created by end on 07/04/17.
@@ -43,26 +44,63 @@ public class BitSetContainer {
     }
 
     private void populateContainer() {
+        LinkedList<Thread> threads = new LinkedList<>();
         for (int x = 0; x < numberOfContainers; x++) {
             if (x != numberOfContainers - 1) {
-                container[x] = new BitSet(Integer.MAX_VALUE);
-                for (int y = 0; y < Integer.MAX_VALUE; y++) {
-                    container[x].set(y, true);
-                }
+                int finalX = x;
+                threads.add(new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        container[finalX] = new BitSet(Integer.MAX_VALUE);
+                        for (int y = 0; y < Integer.MAX_VALUE; y++) {
+                            container[finalX].set(y, true);
+                        }
+                    }
+                }));
             } else {
                 if (numberOfContainers == 1) {
-                    container[x] = new BitSet((int) containerSize);
-                    for (int y = 0; y < containerSize; y++) {
-                        container[x].set(y, true);
-                    }
+                    int finalX1 = x;
+                    threads.add(new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            container[finalX1] = new BitSet((int) containerSize);
+                            for (int y = 0; y < containerSize; y++) {
+                                container[finalX1].set(y, true);
+                            }
+                        }
+                    }));
                 } else {
-                    container[x] = new BitSet((int) (containerSize - (numberOfContainers - 1) * Integer.MAX_VALUE));
-                    for (int y = 0; y < Integer.MAX_VALUE; y++) {
-                        container[x].set(y, true);
+                    int finalX2 = x;
+                    threads.add(new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            container[finalX2] = new BitSet((int) (containerSize - (numberOfContainers - 1) * Integer.MAX_VALUE));
+                            for (int y = 0; y < Integer.MAX_VALUE; y++) {
+                                container[finalX2].set(y, true);
+                            }
+                        }
+                    }));
+                }
+                for (Thread t : threads) {
+                    t.start();
+                }
+                boolean waitUntilAllThreadAreDead = true;
+                while (waitUntilAllThreadAreDead) {
+                    if (aliveThreads(threads) == 0) {
+                        waitUntilAllThreadAreDead = false;
                     }
                 }
             }
         }
+    }
+
+    int aliveThreads(LinkedList<Thread> t) {
+        int threadsAlive = 0;
+        for (int x = 0; x < t.size(); x++) {
+            if (t.get(x).isAlive())
+                threadsAlive++;
+        }
+        return threadsAlive;
     }
 
     private void createContainer() {
