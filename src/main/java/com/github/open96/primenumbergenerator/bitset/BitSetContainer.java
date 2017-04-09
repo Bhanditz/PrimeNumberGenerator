@@ -12,18 +12,16 @@ public class BitSetContainer {
 
 
     public boolean get(long position) {
-        long positionInContainer;
+        int positionInContainer;
         long containerNumber;
-        if (position > Integer.MAX_VALUE) {
+        if (position >= Integer.MAX_VALUE) {
             containerNumber = position / Integer.MAX_VALUE;
-            positionInContainer = position - Integer.MAX_VALUE * containerNumber;
+            positionInContainer = (int)(position - Integer.MAX_VALUE * containerNumber);
         } else {
-            positionInContainer = position;
+            positionInContainer =(int)position;
             containerNumber = 0;
         }
-        if (positionInContainer < 0)
-            System.out.println(containerNumber + " " + positionInContainer + " " + position);
-        return container[(int) containerNumber].get((int) positionInContainer);
+        return container[(int) containerNumber].get(positionInContainer);
     }
 
 
@@ -48,19 +46,19 @@ public class BitSetContainer {
         for (int x = 0; x < numberOfContainers; x++) {
             if (x != numberOfContainers - 1) {
                 container[x] = new BitSet(Integer.MAX_VALUE);
-                for (long y = 0; y <= Integer.MAX_VALUE; y++) {
-                    container[x].set((int) y);
+                for (int y = 0; y < Integer.MAX_VALUE; y++) {
+                    container[x].set(y,true);
                 }
             } else {
                 if (numberOfContainers == 1) {
                     container[x] = new BitSet((int) containerSize);
-                    for (long y = 0; y <= (int) containerSize; y++) {
-                        container[x].set((int) y);
+                    for (int y = 0; y < containerSize; y++) {
+                        container[x].set(y,true);
                     }
                 } else {
                     container[x] = new BitSet((int) (containerSize - (numberOfContainers - 1) * Integer.MAX_VALUE));
-                    for (long y = 0; y <= containerSize - (numberOfContainers - 1) * Integer.MAX_VALUE; y++) {
-                        container[x].set((int) y);
+                    for (int y = 0; y < Integer.MAX_VALUE; y++) {
+                        container[x].set(y,true);
                     }
                 }
             }

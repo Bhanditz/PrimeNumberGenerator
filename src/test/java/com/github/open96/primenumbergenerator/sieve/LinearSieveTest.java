@@ -11,10 +11,10 @@ public class LinearSieveTest extends TestCase {
         //This test could carry on bigger numbers, but it is quite a memory hog so
         // make sure you assign more RAM to your jvm.
         int excepted[] = new int[]{
-                4, 25, 168, 1229, 9592, 78498, 664579, 5761455
+                4, 25, 168, 1229, 9592, 78498, 664579, 5761455, 50847534
         };
         int exceptedCounter = 0;
-        for (long x = 10; x <= new Long(String.valueOf("100000000")); x *= 10) {
+        for (long x = 10; x <= new Long(String.valueOf("1000000000")); x *= 10) {
             Sieve s = new LinearSieve(x);
             s.deleteNonPrimeNumbers();
             assertEquals(s.countPrimes(0, (long) x), excepted[exceptedCounter]);

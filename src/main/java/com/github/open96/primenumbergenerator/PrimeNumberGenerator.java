@@ -10,7 +10,7 @@ public class PrimeNumberGenerator {
     public static void main(String[] args) {
         Timer t = new Timer();
         t.start();
-        long size = new Long(String.valueOf("3000000000"));
+        long size = new Long(String.valueOf("10000000000"));
         Sieve sieve;
         sieve = new LinearSieve(size);
         sieve.deleteNonPrimeNumbers();
