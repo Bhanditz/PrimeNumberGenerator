@@ -86,12 +86,12 @@ public class BitSetContainer {
     }
 
     int aliveThreads(LinkedList<Thread> t) {
-        int threadsAlive = 0;
-        for (int x = 0; x < t.size(); x++) {
-            if (t.get(x).isAlive())
-                threadsAlive++;
-        }
-        return threadsAlive;
+        final int[] threadsAlive = {0};
+        t.forEach(thread -> {
+            if (thread.isAlive())
+                threadsAlive[0]++;
+        });
+        return threadsAlive[0];
     }
 
     private void createContainer() {
