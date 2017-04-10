@@ -48,36 +48,27 @@ public class BitSetContainer {
         for (int x = 0; x < numberOfContainers; x++) {
             if (x != numberOfContainers - 1) {
                 int finalX = x;
-                threads.add(new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        container[finalX] = new BitSet(Integer.MAX_VALUE);
-                        for (int y = 0; y < Integer.MAX_VALUE; y++) {
-                            container[finalX].set(y, true);
-                        }
+                threads.add(new Thread(() -> {
+                    container[finalX] = new BitSet(Integer.MAX_VALUE);
+                    for (int y = 0; y < Integer.MAX_VALUE; y++) {
+                        container[finalX].set(y, true);
                     }
                 }));
             } else {
                 if (numberOfContainers == 1) {
                     int finalX1 = x;
-                    threads.add(new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            container[finalX1] = new BitSet((int) containerSize);
-                            for (int y = 0; y < containerSize; y++) {
-                                container[finalX1].set(y, true);
-                            }
+                    threads.add(new Thread(() -> {
+                        container[finalX1] = new BitSet((int) containerSize);
+                        for (int y = 0; y < containerSize; y++) {
+                            container[finalX1].set(y, true);
                         }
                     }));
                 } else {
                     int finalX2 = x;
-                    threads.add(new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            container[finalX2] = new BitSet((int) (containerSize - (numberOfContainers - 1) * Integer.MAX_VALUE));
-                            for (int y = 0; y < Integer.MAX_VALUE; y++) {
-                                container[finalX2].set(y, true);
-                            }
+                    threads.add(new Thread(() -> {
+                        container[finalX2] = new BitSet((int) (containerSize - (numberOfContainers - 1) * Integer.MAX_VALUE));
+                        for (int y = 0; y < Integer.MAX_VALUE; y++) {
+                            container[finalX2].set(y, true);
                         }
                     }));
                 }
