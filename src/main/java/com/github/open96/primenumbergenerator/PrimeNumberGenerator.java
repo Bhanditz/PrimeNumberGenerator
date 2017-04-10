@@ -42,8 +42,7 @@ public class PrimeNumberGenerator {
                 System.out.println("------------------------");
                 printHelp();
                 while (userInteracts) {
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-                    try {
+                    try(BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in))) {
                         String input = bufferedReader.readLine();
                         switch (input) {
                             case "print":
