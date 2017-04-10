@@ -80,9 +80,14 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
 
     @Override
     public boolean checkIfNumberIsPrime(long number) {
-        boolean isPrime = sieve.get(number);
-        if (isPrime)
-            return true;
+        try {
+            boolean isPrime = sieve.get(number);
+            if (isPrime)
+                return true;
+            return false;
+        } catch (IndexOutOfBoundsException e) {
+            System.out.printf("Number is not in range so I can't specify if is it prime or ");
+        }
         return false;
     }
 
