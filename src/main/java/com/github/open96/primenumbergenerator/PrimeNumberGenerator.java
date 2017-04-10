@@ -24,6 +24,8 @@ public class PrimeNumberGenerator {
     }
 
     public static void main(String[] args) {
+        System.out.println("Welcome to PrimeNumberGenerator. Keep in mind range you specify may be too high for your JVM, therefore you should increase heap space if you want to operate on really big numbers.");
+        System.out.println("This version gives good results up to 6000000000, above that is starts to throw wrong information.");
         if (args.length != 1) {
             System.out.println("Please run application with valid argument e.g. java ../PrimeNumberGenerator 100 or java -jar ../prime-number-generator.jar 100");
         } else {
