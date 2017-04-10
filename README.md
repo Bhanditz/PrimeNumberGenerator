@@ -14,14 +14,14 @@ To compile it yourself you will need Java Development Kit 8 (8u121) and Maven 3.
 
 This program may run on older versions of Java, but it should be ran on those listed above.
 
-## How to play
+## How to run
 
 You can either play this game by typing these commands in Linux terminal:
 ```
 git clone https://github.com/Open96/PrimeNumberGenerator.git
 cd PrimeNumberGenerator
 mvn clean install
-java -jar target/prime-number-generator-1.0.jar <There you have to specify upper range>
+java -jar target/prime-number-generator-1.0.1.jar <There you have to specify upper range>
 ```
 Above commands will download code from that repository into your computer and compile it.
 
