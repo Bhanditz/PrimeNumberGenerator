@@ -1,8 +1,5 @@
 package com.github.open96.primenumbergenerator.timer;
 
-/**
- * Created by end on 06/04/17.
- */
 public class Timer {
     private long startingTime, endingTime;
     private double result;
@@ -48,18 +45,18 @@ public class Timer {
     public double getTimeInMinutes(boolean outputToConsole) {
         if (hasEnded) {
             if (outputToConsole)
-                System.out.println("Timer has ended. Time spent is " + (new Double((result / 1000)/60)) + " minutes");
-            return (result / 1000)/60;
+                System.out.println("Timer has ended. Time spent is " + (new Double((result / 1000) / 60)) + " minutes");
+            return (result / 1000) / 60;
         }
         return -1;
     }
 
-    public void showTimeInConsole(){
+    public void showTimeInConsole() {
         if (result < 1000) {
             getTimeInMilliseconds(true);
-        } else if (result<60000) {
+        } else if (result < 60000) {
             getTimeInSeconds(true);
-        } else{
+        } else {
             getTimeInMinutes(true);
         }
     }

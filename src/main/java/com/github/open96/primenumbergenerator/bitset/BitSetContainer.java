@@ -3,9 +3,7 @@ package com.github.open96.primenumbergenerator.bitset;
 import java.util.BitSet;
 import java.util.LinkedList;
 
-/**
- * Created by end on 07/04/17.
- */
+
 public class BitSetContainer {
     private final long containerSize;
     private BitSet[] container;

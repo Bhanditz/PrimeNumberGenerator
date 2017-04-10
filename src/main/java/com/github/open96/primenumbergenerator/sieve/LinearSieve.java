@@ -2,9 +2,7 @@ package com.github.open96.primenumbergenerator.sieve;
 
 import com.github.open96.primenumbergenerator.bitset.BitSetContainer;
 
-/**
- * Created by end on 06/04/17.
- */
+
 public class LinearSieve implements com.github.open96.primenumbergenerator.sieve.Sieve {
     private final long limit;
     BitSetContainer sieve;
@@ -81,8 +79,7 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
     @Override
     public boolean checkIfNumberIsPrime(long number) {
         try {
-            boolean isPrime = sieve.get(number);
-            return isPrime;
+            return sieve.get(number);
         } catch (IndexOutOfBoundsException e) {
             System.out.printf("Number is not in range so I can't specify if is it prime or ");
         }
