@@ -29,7 +29,7 @@ public class PrimeNumberGenerator {
         if (args.length != 1) {
             System.out.println("Please run application with valid argument e.g. java ../PrimeNumberGenerator 100 or java -jar ../prime-number-generator.jar 100");
         } else {
-            if (Integer.parseInt(args[0]) >= 2) {
+            if (Long.parseLong(args[0]) >= 2) {
                 Timer t = new Timer();
                 t.start();
                 long size = new Long(args[0]);
