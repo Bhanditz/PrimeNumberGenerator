@@ -41,8 +41,8 @@ public class PrimeNumberGenerator {
                 boolean userInteracts = true;
                 System.out.println("------------------------");
                 printHelp();
-                while (userInteracts) {
-                    try(BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in))) {
+                try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in))) {
+                    while (userInteracts) {
                         String input = bufferedReader.readLine();
                         switch (input) {
                             case "print":
@@ -89,9 +89,9 @@ public class PrimeNumberGenerator {
                             default:
                                 System.out.println("Command was not recognized, try again.");
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             } else {
                 System.out.println("Please enter any number bigger than 1.");
