@@ -1,4 +1,4 @@
-# Prime number generator
+# Prime number generator [![Build Status](https://travis-ci.org/Open96/PrimeNumberGenerator.svg?branch=master)](https://travis-ci.org/Open96/PrimeNumberGenerator)
 
 Have you ever wanted to know how many primes are in range from 0 to 6000000000?
 
