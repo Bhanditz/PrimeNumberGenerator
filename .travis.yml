@@ -4,5 +4,7 @@ env:
     JAVA_OPTS=-Xmx3g
 jdk:
 - oraclejdk8
+- openjdk8
 sudo: false
 os: linux
+dist: trusty
