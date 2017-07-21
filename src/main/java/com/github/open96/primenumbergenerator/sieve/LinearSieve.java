@@ -84,14 +84,11 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
         long counter = 0;
         firstMultiplier = 2;
         Thread thread = new Thread(() -> {
-            while (true) {
+            while (Math.pow(getFirstMultiplier(), 2) <= limit) {
                 try {
                     long multiplier = getFirstMultiplier();
-                    while (multiplier * multiplier <= limit) {
-                        System.out.println("Please wait... " + multiplier * multiplier + " / " + limit);
-                        Thread.sleep(1500);
-                        multiplier = getFirstMultiplier();
-                    }
+                    System.out.println("Please wait... " + multiplier * multiplier + " / " + limit);
+                    Thread.sleep(1500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
