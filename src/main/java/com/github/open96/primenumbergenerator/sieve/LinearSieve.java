@@ -9,7 +9,7 @@ import java.io.PrintWriter;
 public class LinearSieve implements com.github.open96.primenumbergenerator.sieve.Sieve {
     private final long limit;
     private BitSetContainer sieve;
-
+    private long firstMultiplier;
 
     public LinearSieve(long upperLimit) {
         if (upperLimit > Long.MAX_VALUE || upperLimit < 2)
@@ -19,6 +19,10 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
         //Already delete 0 and 1 as they are not prime
         sieve.set(0, true);
         sieve.set(1, true);
+    }
+
+    private long getFirstMultiplier() {
+        return firstMultiplier;
     }
 
     public void printSieve() {
@@ -78,9 +82,23 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
 
     public long deleteNonPrimeNumbers() {
         long counter = 0;
-        long firstMultiplier = 2;
+        firstMultiplier = 2;
+        Thread thread = new Thread(() -> {
+            while (true) {
+                try {
+                    long multiplier = getFirstMultiplier();
+                    while (multiplier * multiplier <= limit) {
+                        System.out.println("Please wait... " + multiplier * multiplier + " / " + limit);
+                        Thread.sleep(1500);
+                        multiplier = getFirstMultiplier();
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
         while (firstMultiplier * firstMultiplier <= limit) {
-            System.out.println("Please wait... " + firstMultiplier * firstMultiplier + " / " + limit);
             long secondMultiplier = firstMultiplier;
             while (firstMultiplier * secondMultiplier <= limit) {
                 long x = firstMultiplier * secondMultiplier;
