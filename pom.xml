@@ -42,7 +42,7 @@
         <configuration>
           <forkCount>3</forkCount>
           <reuseForks>true</reuseForks>
-          <argLine>-Xmx2048m -XX:MaxPermSize=2048m</argLine>
+          <argLine>-Xmx3G -Xms3G</argLine>
         </configuration>
       </plugin>
     </plugins>
