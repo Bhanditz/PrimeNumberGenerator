@@ -21,7 +21,7 @@ You can either play this game by typing these commands in Linux terminal:
 git clone https://github.com/Open96/PrimeNumberGenerator.git
 cd PrimeNumberGenerator
 mvn clean install
-java -Xmx3G -Xms3G -jar target/prime-number-generator-1.1-SNAPSHOT.jar <There you have to specify upper range>
+java -Xmx3G -Xms3G -jar target/prime-number-generator-1.1.jar <There you have to specify upper range>
 ```
 Above commands will download code from that repository into your computer and compile it.
 
