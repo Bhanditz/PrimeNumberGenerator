@@ -81,7 +81,7 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
         try {
             return !sieve.get(number);
         } catch (IndexOutOfBoundsException e) {
-            System.out.printf("Number is not in range so I can't specify if is it prime or ");
+            System.out.printf("Number is not in range so I can't specify if is it prime or not");
         }
         return false;
     }
