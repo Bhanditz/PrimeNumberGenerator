@@ -2,6 +2,9 @@ package com.github.open96.primenumbergenerator.sieve;
 
 import com.github.open96.primenumbergenerator.bitset.BitSetContainer;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+
 
 public class LinearSieve implements com.github.open96.primenumbergenerator.sieve.Sieve {
     private final long limit;
@@ -9,7 +12,7 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
 
 
     public LinearSieve(long upperLimit) {
-        if(upperLimit>Long.MAX_VALUE || upperLimit < 2)
+        if (upperLimit > Long.MAX_VALUE || upperLimit < 2)
             throw new IllegalArgumentException("Please provide number smaller than long's maximum value but bigger than 1");
         limit = upperLimit;
         sieve = new BitSetContainer(limit + 1);
@@ -19,13 +22,17 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
     }
 
     public void printSieve() {
-        System.out.println(2);
-        long charactersCount = 3;
-        while (charactersCount <= limit && charactersCount > 0) {
-            if (!sieve.get(charactersCount)) {
-                System.out.println(charactersCount);
+        try (PrintWriter writer = new PrintWriter("Sieve-" + limit + ".txt", "UTF-8")) {
+            writer.println(2);
+            long counter = 3;
+            while (counter <= limit && counter > 0) {
+                if (!sieve.get(counter)) {
+                    writer.println(counter);
+                }
+                counter += 2;
             }
-            charactersCount += 2;
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

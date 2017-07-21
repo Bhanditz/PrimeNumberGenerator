@@ -12,7 +12,7 @@ import java.io.InputStreamReader;
 public class PrimeNumberGenerator {
     private static void printHelp() {
         System.out.println("You can use following commands to interact with this program:");
-        System.out.println("print - Print all prime numbers found in sieve");
+        System.out.println("print - Print all prime numbers found in sieve to .txt file");
         System.out.println("count - Counts prime numbers in specific range");
         System.out.println("check - Check if number is prime");
         System.out.println("help - print this dialog");
@@ -42,6 +42,7 @@ public class PrimeNumberGenerator {
                         switch (input) {
                             case "print":
                                 sieve.printSieve();
+                                System.out.println("Printed sieve to .txt file");
                                 break;
                             case "count":
                                 System.out.println("Enter start of range:");
