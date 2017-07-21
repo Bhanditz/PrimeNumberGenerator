@@ -5,7 +5,7 @@ import com.github.open96.primenumbergenerator.bitset.BitSetContainer;
 
 public class LinearSieve implements com.github.open96.primenumbergenerator.sieve.Sieve {
     private final long limit;
-    BitSetContainer sieve;
+    private BitSetContainer sieve;
 
 
     public LinearSieve(long upperLimit) {
