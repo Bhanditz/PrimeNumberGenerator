@@ -36,7 +36,7 @@ public class Timer {
     public double getTimeInSeconds(boolean outputToConsole) {
         if (hasEnded) {
             if (outputToConsole)
-                System.out.println("Timer has ended. Time spent is " + (new Double(result / 1000)) + " seconds");
+                System.out.println("Timer has ended. Time spent is " + (result / 1000) + " seconds");
             return result / 1000;
         }
         return -1;
@@ -45,7 +45,7 @@ public class Timer {
     public double getTimeInMinutes(boolean outputToConsole) {
         if (hasEnded) {
             if (outputToConsole)
-                System.out.println("Timer has ended. Time spent is " + (new Double((result / 1000) / 60)) + " minutes");
+                System.out.println("Timer has ended. Time spent is " + ((result / 1000) / 60) + " minutes");
             return (result / 1000) / 60;
         }
         return -1;
