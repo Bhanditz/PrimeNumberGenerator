@@ -80,9 +80,9 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
                     sieve.set(x, true);
                     x = firstMultiplier * x;
                 }
-                secondMultiplier = nextProbablePrime((int) secondMultiplier);
+                secondMultiplier = nextProbablePrime(secondMultiplier);
             }
-            firstMultiplier = nextProbablePrime((int) firstMultiplier);
+            firstMultiplier = nextProbablePrime(firstMultiplier);
         }
         return limit - counter - 1;
     }
