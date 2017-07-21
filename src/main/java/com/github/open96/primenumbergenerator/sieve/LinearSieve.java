@@ -8,6 +8,14 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
     BitSetContainer sieve;
 
 
+    public LinearSieve(long upperLimit) {
+        limit = upperLimit;
+        sieve = new BitSetContainer(limit + 1);
+        //Already delete 0 and 1 as they are not prime
+        sieve.set(0, true);
+        sieve.set(1, true);
+    }
+
     public void printSieve() {
         System.out.println(2);
         long charactersCount = 3;
@@ -59,7 +67,8 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
         return limit;
     }
 
-    public void deleteNonPrimeNumbers() {
+    public long deleteNonPrimeNumbers() {
+        long counter = 0;
         long firstMultiplier = 2;
         while (firstMultiplier * firstMultiplier <= limit) {
             System.out.println("Please wait... " + firstMultiplier * firstMultiplier + " / " + limit);
@@ -67,6 +76,7 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
             while (firstMultiplier * secondMultiplier <= limit) {
                 long x = firstMultiplier * secondMultiplier;
                 while (x <= limit && x > 0) {
+                    counter++;
                     sieve.set(x, true);
                     x = firstMultiplier * x;
                 }
@@ -74,6 +84,7 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
             }
             firstMultiplier = nextProbablePrime((int) firstMultiplier);
         }
+        return limit - counter - 1;
     }
 
     @Override
@@ -84,13 +95,5 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
             System.out.printf("Number is not in range so I can't specify if is it prime or not");
         }
         return false;
-    }
-
-    public LinearSieve(long upperLimit) {
-        limit = upperLimit;
-        sieve = new BitSetContainer(limit + 1);
-        //Already delete 0 and 1 as they are not prime
-        sieve.set(0, true);
-        sieve.set(1, true);
     }
 }

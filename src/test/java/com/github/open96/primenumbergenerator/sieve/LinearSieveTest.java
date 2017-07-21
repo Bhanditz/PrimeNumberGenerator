@@ -16,8 +16,9 @@ public class LinearSieveTest extends TestCase {
         int exceptedCounter = 0;
         for (Long x = 10L; x <= new Long(String.valueOf("10000000")); x *= 10) {
             Sieve s = new LinearSieve(x);
-            s.deleteNonPrimeNumbers();
+            long actuallyDeleted = s.deleteNonPrimeNumbers();
             assertEquals(s.countPrimes(0, x), excepted[exceptedCounter]);
+            assertEquals(actuallyDeleted, excepted[exceptedCounter]);
             assertEquals(s.countPrimes(-1, x), -1);
             assertEquals(s.countPrimes(0, x + 5), -1);
             exceptedCounter++;
@@ -25,8 +26,9 @@ public class LinearSieveTest extends TestCase {
         // Cases where upper range are not result of powering 10
         Long x = 3000000000L;
         Sieve s = new LinearSieve(x);
-        s.deleteNonPrimeNumbers();
+        long actuallyDeleted = s.deleteNonPrimeNumbers();
         assertEquals(s.countPrimes(0, x), excepted[exceptedCounter]);
+        assertEquals(actuallyDeleted, excepted[exceptedCounter]);
         assertEquals(s.countPrimes(-1, x), -1);
         assertEquals(s.countPrimes(0, x + 5), -1);
         exceptedCounter++;
