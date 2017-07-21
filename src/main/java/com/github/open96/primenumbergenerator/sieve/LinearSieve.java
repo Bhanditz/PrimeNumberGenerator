@@ -9,6 +9,8 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
 
 
     public LinearSieve(long upperLimit) {
+        if(upperLimit>Long.MAX_VALUE || upperLimit < 2)
+            throw new IllegalArgumentException("Please provide number smaller than long's maximum value but bigger than 1");
         limit = upperLimit;
         sieve = new BitSetContainer(limit + 1);
         //Already delete 0 and 1 as they are not prime
