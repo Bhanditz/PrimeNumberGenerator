@@ -12,7 +12,7 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
         System.out.println(2);
         long charactersCount = 3;
         while (charactersCount <= limit && charactersCount > 0) {
-            if (sieve.get(charactersCount)) {
+            if (!sieve.get(charactersCount)) {
                 System.out.println(charactersCount);
             }
             charactersCount += 2;
@@ -50,7 +50,7 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
         long tmp = startingNumber + 1;
         if (tmp >= 0) {
             while (tmp <= limit) {
-                if (sieve.get(tmp)) {
+                if (!sieve.get(tmp)) {
                     return tmp;
                 }
                 tmp++;
@@ -67,7 +67,7 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
             while (firstMultiplier * secondMultiplier <= limit) {
                 long x = firstMultiplier * secondMultiplier;
                 while (x <= limit && x > 0) {
-                    sieve.set(x, false);
+                    sieve.set(x, true);
                     x = firstMultiplier * x;
                 }
                 secondMultiplier = nextProbablePrime((int) secondMultiplier);
@@ -79,7 +79,7 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
     @Override
     public boolean checkIfNumberIsPrime(long number) {
         try {
-            return sieve.get(number);
+            return !sieve.get(number);
         } catch (IndexOutOfBoundsException e) {
             System.out.printf("Number is not in range so I can't specify if is it prime or ");
         }
@@ -90,7 +90,7 @@ public class LinearSieve implements com.github.open96.primenumbergenerator.sieve
         limit = upperLimit;
         sieve = new BitSetContainer(limit + 1);
         //Already delete 0 and 1 as they are not prime
-        sieve.set(0, false);
-        sieve.set(1, false);
+        sieve.set(0, true);
+        sieve.set(1, true);
     }
 }
