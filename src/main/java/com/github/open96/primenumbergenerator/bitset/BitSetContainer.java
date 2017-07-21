@@ -10,6 +10,11 @@ public class BitSetContainer {
     private int numberOfContainers;
 
 
+    public BitSetContainer(long size) {
+        containerSize = size;
+        createContainer();
+    }
+
     public boolean get(long position) {
         int positionInContainer;
         long containerNumber;
@@ -23,19 +28,18 @@ public class BitSetContainer {
         return container[(int) containerNumber].get(positionInContainer);
     }
 
-
     public boolean set(long position, boolean value) {
         if (position < containerSize) {
-            long positionInContainer;
+            int positionInContainer;
             long containerNumber;
             if (position > Integer.MAX_VALUE) {
                 containerNumber = position / Integer.MAX_VALUE;
-                positionInContainer = position - Integer.MAX_VALUE * (containerNumber);
+                positionInContainer = (int) (position - Integer.MAX_VALUE * containerNumber);
             } else {
-                positionInContainer = position;
+                positionInContainer = (int) position;
                 containerNumber = 0;
             }
-            container[(int) containerNumber].set((int) positionInContainer, value);
+            container[(int) containerNumber].set(positionInContainer, value);
             return true;
         }
         return false;
@@ -87,10 +91,5 @@ public class BitSetContainer {
         numberOfContainers = (int) (containerSize / Integer.MAX_VALUE + 1);
         container = new BitSet[numberOfContainers];
         populateContainer();
-    }
-
-    public BitSetContainer(long size) {
-        containerSize = size;
-        createContainer();
     }
 }
