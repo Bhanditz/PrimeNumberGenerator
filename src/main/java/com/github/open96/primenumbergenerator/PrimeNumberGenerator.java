@@ -9,10 +9,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-/**
- * Program works properly up to 6000000000, on 7000000000 it starts to throw incorrect results
- */
-
 public class PrimeNumberGenerator {
     private static void printHelp() {
         System.out.println("You can use following commands to interact with this program:");
@@ -24,8 +20,7 @@ public class PrimeNumberGenerator {
     }
 
     public static void main(String[] args) {
-        System.out.println("Welcome to PrimeNumberGenerator. Keep in mind range you specify may be too high for your JVM, therefore you should increase heap space if you want to operate on really big numbers.");
-        System.out.println("This version gives good results up to 6000000000, above that is starts to throw wrong information.");
+        System.out.println("Welcome to PrimeNumberGenerator. Keep in mind range you specify may be too high for your JVM, therefore you should increase heap space even more if you want to operate on really big numbers.");
         if (args.length != 1) {
             System.out.println("Please run application with valid argument e.g. java ../PrimeNumberGenerator 100 or java -jar ../prime-number-generator.jar 100");
         } else {
