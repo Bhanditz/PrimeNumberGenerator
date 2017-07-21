@@ -44,11 +44,11 @@ public class PrimeNumberGenerator {
                                 sieve.printSieve();
                                 break;
                             case "count":
-                                System.out.println("Enter starting range");
+                                System.out.println("Enter start of range:");
                                 String start = bufferedReader.readLine();
-                                System.out.println("Enter end of range");
+                                System.out.println("Enter end of range:");
                                 String end = bufferedReader.readLine();
-                                System.out.printf("Number of primes in range: ");
+                                System.out.println("Number of primes in range:");
                                 try {
                                     long primes = sieve.countPrimes(Long.parseLong(start), Long.parseLong(end));
                                     if (primes == -1) {
