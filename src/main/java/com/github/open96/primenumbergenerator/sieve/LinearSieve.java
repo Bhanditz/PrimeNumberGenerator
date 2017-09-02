@@ -5,7 +5,9 @@ import com.github.open96.primenumbergenerator.bitset.BitSetContainer;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-
+/**
+ * Implementation of linear sieve.
+ */
 public class LinearSieve implements com.github.open96.primenumbergenerator.sieve.Sieve {
     private final long limit;
     private BitSetContainer sieve;

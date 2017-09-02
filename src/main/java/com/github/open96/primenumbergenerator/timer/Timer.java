@@ -1,5 +1,8 @@
 package com.github.open96.primenumbergenerator.timer;
 
+/**
+ * Simple timer class that counts time since calling start() to calling stop() methods.
+ */
 public class Timer {
     private long startingTime, endingTime;
     private double result;

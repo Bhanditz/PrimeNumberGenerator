@@ -1,6 +1,8 @@
 package com.github.open96.primenumbergenerator.sieve;
 
-
+/**
+ * Sieve interface, contains every method any sieve should have in my program.
+ */
 public interface Sieve {
     long deleteNonPrimeNumbers();
 

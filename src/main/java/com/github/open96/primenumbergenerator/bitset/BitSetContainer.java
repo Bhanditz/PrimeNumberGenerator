@@ -3,7 +3,9 @@ package com.github.open96.primenumbergenerator.bitset;
 import java.util.BitSet;
 import java.util.LinkedList;
 
-
+/**
+ * My own extension of BitSet class that allows to create arrays up to long's maximum size.
+ */
 public class BitSetContainer {
     private final long containerSize;
     private BitSet[] container;

@@ -19,6 +19,10 @@ public class PrimeNumberGenerator {
         System.out.println("exit - Exit program");
     }
 
+    /**
+     * Simple "CLI" that allows user to interact with program.
+     * @param args - Upper limit to which program will calculate primes.
+     */
     public static void main(String[] args) {
         System.out.println("Welcome to PrimeNumberGenerator. Keep in mind range you specify may be too high for your JVM, therefore you should increase heap space even more if you want to operate on really big numbers.");
         if (args.length != 1) {
