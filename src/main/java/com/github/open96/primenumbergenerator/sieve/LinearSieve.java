@@ -8,7 +8,7 @@ import java.io.PrintWriter;
 /**
  * Implementation of linear sieve.
  */
-public class LinearSieve implements com.github.open96.primenumbergenerator.sieve.Sieve {
+public class LinearSieve implements Sieve {
     private final long limit;
     private BitSetContainer sieve;
     private long firstMultiplier;
